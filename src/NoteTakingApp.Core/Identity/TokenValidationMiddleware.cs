@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
+using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,16 +22,10 @@ namespace NoteTakingApp.Core.Identity
         public async Task Invoke(HttpContext httpContext)
         {
             if (httpContext.User.Identity.IsAuthenticated)
-            {
-                httpContext.Request.Headers.TryGetValue("Authorization", out StringValues value);
+            {              
+                var cachedValidTokens = _cache.Get<List<string>>("ValidAccessTokens");
 
-                if(StringValues.IsNullOrEmpty(value)) value = httpContext.Request.Query["token"];
-
-                var validTokens = _cache.Get<List<string>>("ValidAccessTokens");
-
-                var accessToken = value.ToString().Replace("Bearer ","");
-
-                if (!validTokens.Contains(accessToken))
+                if (!cachedValidTokens.Contains(httpContext.Request.GetAccessToken()))
                 {
                     httpContext.Response.StatusCode = 401;
                     await httpContext.Response.WriteAsync("Unauthorized");
