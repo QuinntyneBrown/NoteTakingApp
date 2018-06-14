@@ -1,26 +1,23 @@
-﻿using NoteTakingApp.API.Features.Identity;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Moq;
+using NoteTakingApp.API.Features.Identity;
 using NoteTakingApp.Core.Entities;
 using NoteTakingApp.Core.Identity;
 using NoteTakingApp.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-using Moq;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using MediatR;
 
 namespace UnitTests.API
 {
     public class UserUnitTests
     {
-        protected readonly Mock<IPasswordHasher> _passwordHasherMock;
-        protected readonly Mock<ITokenManager> _tokenManagerMock;
-        protected readonly Mock<IOptions<AuthenticationSettings>> _authenticationSettingMock;
+        private readonly Mock<IPasswordHasher> _passwordHasherMock;
+        private readonly Mock<ITokenManager> _tokenManagerMock;
+        private readonly Mock<IOptions<AuthenticationSettings>> _authenticationSettingMock;
         private readonly Mock<IMediator> _mediatorMock;
 
         public UserUnitTests()

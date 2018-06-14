@@ -26,7 +26,7 @@ export class HubClient {
   public connect(): Promise<any> {    
     if (this._connect) return this._connect;
 
-    this._connect = new Promise(resolve => {
+    this._connect = new Promise((resolve,reject) => {
       this._connection =
         this._connection || new HubConnectionBuilder()
           .configureLogging(this._logger)
@@ -39,9 +39,7 @@ export class HubClient {
         this._ngZone.run(() => this.messages$.next(value));
       });
 
-      this._connection.start().then(() => resolve(), () => {
-        alert("rejected?");
-      });
+      this._connection.start().then(() => resolve(),() => reject());
 
       this._connection.onclose(() => {
         this._loginRedirectService.redirectToLogin();

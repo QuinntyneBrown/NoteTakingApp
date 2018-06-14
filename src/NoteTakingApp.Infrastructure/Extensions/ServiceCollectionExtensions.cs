@@ -11,6 +11,7 @@ namespace NoteTakingApp.Infrastructure.Extensions
                                                string connectionString)
         {
             services.AddScoped<IAppDbContext, AppDbContext>();
+            services.AddScoped<IAccessTokenRepository, AccessTokenRepository>();
 
             services.AddDbContext<AppDbContext>(options =>
             {                

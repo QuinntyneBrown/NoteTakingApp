@@ -36,8 +36,7 @@ namespace NoteTakingApp.API
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddMemoryCache();
-            services.AddSingleton<ICache, MemoryCache>();
-            services.AddSingleton<IAccessTokenRepository, AccessTokenRepository>();
+            services.AddSingleton<ICache, MemoryCache>();            
         }
         
         public void Configure(IApplicationBuilder app, IAppDbContext context, ICache cache)
