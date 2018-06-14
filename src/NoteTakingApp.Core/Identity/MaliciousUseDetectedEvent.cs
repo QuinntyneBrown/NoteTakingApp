@@ -1,5 +1,4 @@
-﻿using NoteTakingApp.Core.Entities;
-using MediatR;
+﻿using MediatR;
 
 namespace NoteTakingApp.Core.Identity
 {

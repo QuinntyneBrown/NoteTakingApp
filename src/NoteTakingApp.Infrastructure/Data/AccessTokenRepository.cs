@@ -1,4 +1,5 @@
-﻿using NoteTakingApp.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using NoteTakingApp.Core.Entities;
 using NoteTakingApp.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,19 @@ namespace NoteTakingApp.Infrastructure.Data
     {
         private readonly IAppDbContext _context;
         public AccessTokenRepository(IAppDbContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         public List<AccessToken> GetByUsername(string username)
-        {
-            return _context.AccessTokens.Where(x => x.Username == username && x.ValidTo > DateTime.UtcNow).ToList();
-        }
+            => GetValidAccessTokens().Where(x => x.Username == username).ToList();
 
         public List<string> GetValidAccessTokenValues()
-        {
-            return _context.AccessTokens.Where(x => x.ValidTo > DateTime.UtcNow).Select(x => x.Value).ToList();
-        }
+            => GetValidAccessTokens().Select(x => x.Value).ToList();
+
+        public Task<List<string>> GetValidAccessTokenValuesAsync()
+            => GetValidAccessTokens().Select(x => x.Value).ToListAsync();
+
+        public IQueryable<AccessToken> GetValidAccessTokens()
+            => _context.AccessTokens.Where(x => x.ValidTo > DateTime.UtcNow);
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken) {
             return _context.SaveChangesAsync(cancellationToken);

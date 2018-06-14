@@ -22,12 +22,12 @@ namespace NoteTakingApp.API.Features.Identity
         {
             foreach (var accessToken in _repository.GetByUsername(notification.Username))
             {
-                accessToken.ValidTo = DateTime.UtcNow.AddYears(-1);
+                accessToken.ValidTo = default(DateTime);
             }
 
             await _repository.SaveChangesAsync(cancellationToken);
             
-            _cache.Add(_repository.GetValidAccessTokenValues(), "ValidAccessTokens");
+            _cache.Remove("ValidAccessTokens");
         }
     }
 }
