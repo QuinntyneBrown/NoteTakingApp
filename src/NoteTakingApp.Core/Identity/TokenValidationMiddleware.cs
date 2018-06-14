@@ -21,17 +21,11 @@ namespace NoteTakingApp.Core.Identity
         
         public async Task Invoke(HttpContext httpContext)
         {
-            if (httpContext.User.Identity.IsAuthenticated)
-            {              
-                var cachedValidTokens = _cache.Get<List<string>>("ValidAccessTokens");
-
-                if (!cachedValidTokens.Contains(httpContext.Request.GetAccessToken()))
-                {
-                    httpContext.Response.StatusCode = 401;
-                    await httpContext.Response.WriteAsync("Unauthorized");
-                }
-                else
-                    await _next.Invoke(httpContext);
+            if (httpContext.User.Identity.IsAuthenticated 
+                && !_cache.Get<List<string>>("ValidAccessTokens").Contains(httpContext.Request.GetAccessToken()))
+            {
+                httpContext.Response.StatusCode = 401;
+                await httpContext.Response.WriteAsync("Unauthorized");                
             }
             else
                 await _next.Invoke(httpContext);            
