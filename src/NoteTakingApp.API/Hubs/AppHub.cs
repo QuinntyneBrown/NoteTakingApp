@@ -1,8 +1,7 @@
-﻿using NoteTakingApp.Core.Exceptions;
-using NoteTakingApp.Core.Identity;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using NoteTakingApp.Core.Identity;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;

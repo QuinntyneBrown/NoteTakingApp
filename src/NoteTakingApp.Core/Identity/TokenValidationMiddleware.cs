@@ -24,7 +24,7 @@ namespace NoteTakingApp.Core.Identity
             if (httpContext.User.Identity.IsAuthenticated 
                 && !_cache.Get<List<string>>("ValidAccessTokens").Contains(httpContext.Request.GetAccessToken()))
             {
-                httpContext.Response.StatusCode = 401;
+                httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                 await httpContext.Response.WriteAsync("Unauthorized");                
             }
             else

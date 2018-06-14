@@ -1,7 +1,7 @@
 import { Injectable, NgZone, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
-import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { HubConnection, HubConnectionBuilder, IHttpConnectionOptions } from '@aspnet/signalr';
 import { LocalStorageService } from './local-storage.service';
 import { accessTokenKey, baseUrl } from './constants';
 import { filter } from 'rxjs/operators';
@@ -26,11 +26,15 @@ export class HubClient {
   public connect(): Promise<any> {    
     if (this._connect) return this._connect;
 
-    this._connect = new Promise((resolve,reject) => {
+    this._connect = new Promise((resolve, reject) => {
+      const options: IHttpConnectionOptions = {
+        logMessageContent: true
+      };
+
       this._connection =
         this._connection || new HubConnectionBuilder()
           .configureLogging(this._logger)
-          .withUrl(`${this._baseUrl}hub?token=${this._storage.get({ name: accessTokenKey })}`)
+          .withUrl(`${this._baseUrl}hub?token=${this._storage.get({ name: accessTokenKey })}`, options)
           .build();
 
       this._connection.on('message', value => {
@@ -41,7 +45,7 @@ export class HubClient {
 
       this._connection.start().then(() => resolve(),() => reject());
 
-      this._connection.onclose(() => {
+      this._connection.onclose((error) => {
         this._loginRedirectService.redirectToLogin();
       });
     });
