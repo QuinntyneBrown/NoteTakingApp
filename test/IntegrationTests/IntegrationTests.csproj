@@ -24,15 +24,5 @@
     <ProjectReference Include="..\..\src\NoteTakingApp.Core\NoteTakingApp.Core.csproj" />
     <ProjectReference Include="..\..\src\NoteTakingApp.Infrastructure\NoteTakingApp.Infrastructure.csproj" />
   </ItemGroup>
-  
-  <ItemGroup> 
-    <None Update="xunit.runner.json"> <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> </None> 
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Update="settings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
-﻿using NoteTakingApp.Core.Identity;
+﻿using MediatR;
+using NoteTakingApp.Core.Identity;
 using NoteTakingApp.Core.Interfaces;
-using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 
 namespace NoteTakingApp.API.Features.Identity
 {
@@ -21,9 +21,7 @@ namespace NoteTakingApp.API.Features.Identity
         public async Task Handle(MaliciousUseDetectedEvent notification, CancellationToken cancellationToken)
         {
             foreach (var accessToken in _repository.GetByUsername(notification.Username))
-            {
                 accessToken.ValidTo = default(DateTime);
-            }
 
             await _repository.SaveChangesAsync(cancellationToken);
             

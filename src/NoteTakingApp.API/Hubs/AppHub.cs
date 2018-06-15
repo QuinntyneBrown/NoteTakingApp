@@ -20,7 +20,7 @@ namespace NoteTakingApp.API.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            if (!_connectedUsers.TryAdd(UserName, 0))
+            if (!_connectedUsers.TryAdd(UserName,0))
             {
                 await _mediator.Publish(new MaliciousUseDetectedEvent(UserName));
                 Context.Abort();
@@ -31,7 +31,7 @@ namespace NoteTakingApp.API.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            _connectedUsers.TryRemove(UserName, out byte value);
+            _connectedUsers.TryRemove(UserName, out _);
 
             return base.OnDisconnectedAsync(exception);
         }

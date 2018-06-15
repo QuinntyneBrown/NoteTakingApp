@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
-import { accessTokenKey, baseUrl, currentUserNameKey } from '../core/constants';
-import { HubClient } from '../core/hub-client';
-import { LocalStorageService } from '../core/local-storage.service';
+import { accessTokenKey, baseUrl, currentUserNameKey } from './constants';
+import { HubClient } from './hub-client';
+import { LocalStorageService } from './local-storage.service';
 import { Logger } from './logger.service';
-import { request } from 'http';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +17,8 @@ export class AuthService {
   ) {}
 
   public logout() {
+    this._loggerService.trace('AuthService', 'tryToLogout');
+
     return this._httpClient
       .get(`${this._baseUrl}api/users/signout/${this._localStorageService.get({ name: currentUserNameKey })}`)
       .pipe(tap(() => {

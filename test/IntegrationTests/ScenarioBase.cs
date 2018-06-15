@@ -1,13 +1,12 @@
-﻿using NoteTakingApp.API;
-using NoteTakingApp.Core.Identity;
-using NoteTakingApp.Infrastructure.Data;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NoteTakingApp.API;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 
@@ -17,6 +16,8 @@ namespace IntegrationTests
     {
         protected TestServer CreateServer()
         {
+            var connectionString = $"Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=NoteTakingAppIntegrationTests{Guid.NewGuid()};Integrated Security=SSPI;";
+
             var webHostBuilder = new WebHostBuilder()
                     .UseStartup(typeof(Startup))
                     .UseKestrel()
@@ -24,35 +25,24 @@ namespace IntegrationTests
                     .ConfigureAppConfiguration((builderContext, config) =>
                     {
                         config
-                        .AddJsonFile("settings.json");
+                        .AddInMemoryCollection(new Dictionary<string, string>
+                        {
+                            { "isTest", "true"},
+                            { "Authentication:MaximumUsers", "2" },
+                            { "Data:DefaultConnection:ConnectionString", connectionString }
+                        });
                     });
+            
+            var testServer = new IntegrationTestServer(webHostBuilder);
 
-            var testServer = new TestServer(webHostBuilder);
-
-            ResetDatabase(testServer.Host);
+            testServer.ResetDatabase();
 
             return testServer;
         }
-
-        protected void ResetDatabase(IWebHost host)
-        {            
-            var services = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory));
-
-            using (var scope = services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                context.Database.EnsureDeleted();
-
-                context.Database.EnsureCreated();
-
-                SeedData.Seed(context);
-            }
-        }
-
+        
         protected HubConnection GetHubConnection(HttpMessageHandler httpMessageHandler) 
             => new HubConnectionBuilder()
-                            .WithUrl($"http://integrationtests/hub?token={GetAccessToken()}",(options) => {
+                            .WithUrl("http://integrationtests/hub",(options) => {
                                 options.Transports = HttpTransportType.ServerSentEvents;
                                 options.HttpMessageHandlerFactory = h => httpMessageHandler;
                             })
@@ -63,10 +53,5 @@ namespace IntegrationTests
                 .SetBasePath(Path.GetFullPath(@"../../../../../src/NoteTakingApp.API/"))
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
-
-        protected string GetAccessToken() {
-            var tokenProvider = new TokenManager(GetConfiguration());
-            return tokenProvider.Issue("integration@tests.com");
-        }
     }
 }
