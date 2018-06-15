@@ -11,7 +11,7 @@
     <button mat-button routerLink="/notes">{{ "Notes" | translate }}</button>
     <button mat-button routerLink="/tags">{{ "Tags" | translate }}</button>
     <button mat-button routerLink="/settings">{{ "Settings" | translate }}</button>
-    <button mat-button routerLink="/login">{{ "Logout" | translate }}</button>
+    <button mat-button (click)="tryToLogout()">{{ "Logout" | translate }}</button>
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="router-outlet-container">

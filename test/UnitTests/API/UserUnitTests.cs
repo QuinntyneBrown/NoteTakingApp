@@ -61,7 +61,8 @@ namespace UnitTests.API
 
                 context.SaveChanges();
 
-                var handler = new AuthenticateCommand.Handler(context,_authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
+
+                var handler = new AuthenticateCommand.Handler(new AccessTokenRepository(context), context, _authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
 
                 var response = await handler.Handle(new AuthenticateCommand.Request()
                 {

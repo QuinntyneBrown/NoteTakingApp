@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NoteTakingApp.API.Features.Identity
 {
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     [Route("api/users")]
     public class UsersController
@@ -14,15 +14,12 @@ namespace NoteTakingApp.API.Features.Identity
 
         public UsersController(IMediator mediator) => _mediator = mediator;
         
-        [AllowAnonymous]
         [HttpPost("token")]
         public async Task<ActionResult<AuthenticateCommand.Response>> SignIn(AuthenticateCommand.Request request)
             => await _mediator.Send(request);
 
-        [AllowAnonymous]
         [HttpGet("signout/{username}")]
         public async Task<ActionResult<SignOutCommand.Response>> SignOut([FromRoute]SignOutCommand.Request request)
             => await _mediator.Send(request);
-
     }
 }

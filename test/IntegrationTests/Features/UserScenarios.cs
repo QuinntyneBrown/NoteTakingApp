@@ -15,11 +15,11 @@ namespace IntegrationTests.Features
                 var response = await server.CreateClient()
                     .PostAsAsync<AuthenticateCommand.Request, AuthenticateCommand.Response>(Post.Token, new AuthenticateCommand.Request()
                     {
-                        Username = "quinntynebrown@gmail.com",
+                        Username = "kirkabrown@ymail.com",
                         Password = "P@ssw0rd"
                     });
 
-                Assert.True(response.UserId == 1);
+                Assert.True(response.UserId == 2);
                 Assert.True(response.AccessToken != default(string));
             }
         }

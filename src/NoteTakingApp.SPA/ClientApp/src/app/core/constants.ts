@@ -1,3 +1,4 @@
+export const currentUserNameKey = 'currentUserKey';
 export const accessTokenKey = 'accessTokenKey';
 export const baseUrl = 'baseUrl';
 export const dateFormat = 'MMMM D; YYYY';
