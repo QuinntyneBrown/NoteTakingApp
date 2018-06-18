@@ -36,6 +36,6 @@ namespace NoteTakingApp.API.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task Send(string message) => await Clients.All.SendAsync("message", message);
+        public async Task Send(object message) => await Clients.All.SendAsync("message", message);
     }
 }

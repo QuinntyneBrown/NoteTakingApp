@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
 
 namespace NoteTakingApp.Infrastructure.Data
 {    
@@ -31,16 +33,14 @@ namespace NoteTakingApp.Infrastructure.Data
         
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            int result = default(int);
-
-            ChangeTracker.DetectChanges();
+            var result = default(int);
             
             var domainEventEntities = ChangeTracker.Entries<BaseEntity>()
                 .Select(entityEntry => entityEntry.Entity)
                 .Where(entity => entity.DomainEvents.Any())
                 .ToArray();
             
-            foreach (var entity in ChangeTracker.Entries<ILoggable>()
+            foreach (var entity in ChangeTracker.Entries<BaseEntity>()
                 .Where(e => (e.State == EntityState.Added || (e.State == EntityState.Modified)))
                 .Select(x => x.Entity))
             {
@@ -49,10 +49,10 @@ namespace NoteTakingApp.Infrastructure.Data
                 entity.LastModifiedOn = DateTime.UtcNow;
             }
 
-            foreach (var item in ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted))
+            foreach (var item in ChangeTracker.Entries<BaseEntity>().Where(e => e.State == EntityState.Deleted))
             {
                 item.State = EntityState.Modified;
-                item.CurrentValues["IsDeleted"] = true;
+                item.Entity.IsDeleted = true;
             }
 
             result = await base.SaveChangesAsync(cancellationToken);
@@ -60,7 +60,9 @@ namespace NoteTakingApp.Infrastructure.Data
             foreach (var entity in domainEventEntities)
             {
                 var events = entity.DomainEvents.ToArray();
+
                 entity.ClearEvents();
+
                 foreach (var domainEvent in events)
                 {
                     await _mediator.Publish(domainEvent, cancellationToken);
@@ -69,7 +71,7 @@ namespace NoteTakingApp.Infrastructure.Data
 
             return result;
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Note>()

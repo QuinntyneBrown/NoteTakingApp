@@ -97,7 +97,7 @@ namespace NoteTakingApp.API
             app.UseSignalR(routes => routes.MapHub<AppHub>("/hub"));
             app.UseSwagger();
             app.UseSwaggerUI(options
-                => options.SwaggerEndpoint("/swagger/v1/swagger.json", "NoteTakingApp API"));            
+                => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Note Taking App API"));            
         }
     }
 }
