@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using System.Net.Http;
 
 namespace IntegrationTests.Features
 {
@@ -53,32 +54,20 @@ namespace IntegrationTests.Features
         {
             using (var server = CreateServer())
             {
-                var context = server.Host.Services.GetService(typeof(AppDbContext)) as AppDbContext;
-
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title1",
-                    Body = "Body"
-                });
-
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title2",
-                    Body = "Body"
-                });
-
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title3",
-                    Body = "Body"
-                });
-
-                context.SaveChanges();
+                await server.CreateClient()
+                    .PostAsync(Post.Notes, new 
+                    {
+                        Note = new
+                        {
+                            Title = "First Note",
+                            Body = "<p>Something Important</p>",
+                        }
+                    });
 
                 var response = await server.CreateClient()
                     .GetAsync<GetNotesQuery.Response>(Get.Notes);
 
-                Assert.True(response.Notes.Count() == 3);
+                Assert.True(response.Notes.Count() == 1);
             }
         }
 
@@ -87,16 +76,16 @@ namespace IntegrationTests.Features
         {
             using (var server = CreateServer())
             {
-                var context = server.Host.Services.GetService(typeof(AppDbContext)) as AppDbContext;
-
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title",
-                    Body = "Body",
-                });
-
-                context.SaveChanges();
-
+                await server.CreateClient()
+                    .PostAsync(Post.Notes, new
+                    {
+                        Note = new
+                        {
+                            Title = "First Note",
+                            Body = "<p>Something Important</p>",
+                        }
+                    });
+                
                 var response = await server.CreateClient()
                     .GetAsync<GetNoteByIdQuery.Response>(Get.NoteById(1));
 
@@ -109,17 +98,16 @@ namespace IntegrationTests.Features
         {            
             using (var server = CreateServer())
             {
-                var context = server.Host.Services.GetService(typeof(AppDbContext)) as AppDbContext;
-
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title",
-                    Body = "Body",
-                    Slug = "title"
-                });
-
-                context.SaveChanges();
-
+                await server.CreateClient()
+                    .PostAsync(Post.Notes, new
+                    {
+                        Note = new
+                        {
+                            Title = "Title",
+                            Body = "<p>Something Important</p>",
+                        }
+                    });
+                
                 var response = await server.CreateClient()
                     .GetAsync<GetNoteBySlugQuery.Response>(Get.NoteBySlug("title"));
 
@@ -130,18 +118,17 @@ namespace IntegrationTests.Features
         [Fact]
         public async Task ShouldUpdateNote()
         {
-
             using (var server = CreateServer())
             {
-                var context = server.Host.Services.GetService(typeof(AppDbContext)) as AppDbContext;
-
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title",
-                    Body = "Body",
-                });
-
-                context.SaveChanges();
+                await server.CreateClient()
+                    .PostAsync(Post.Notes, new
+                    {
+                        Note = new
+                        {
+                            Title = "Title",
+                            Body = "<p>Something Important</p>",
+                        }
+                    });
 
                 var saveResponse = await server.CreateClient()
                     .PostAsAsync<SaveNoteCommand.Request, SaveNoteCommand.Response>(Post.Notes, new SaveNoteCommand.Request()
@@ -158,41 +145,41 @@ namespace IntegrationTests.Features
             }
         }
         
-        [Fact]
-        public async Task ShouldDeleteNote()
-        {
-            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        //[Fact]
+        //public async Task ShouldDeleteNote()
+        //{
+        //    var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            using (var server = CreateServer())
-            {
-                var context = server.Host.Services.GetService(typeof(AppDbContext)) as AppDbContext;
+        //    using (var server = CreateServer())
+        //    {
+        //        await server.CreateClient()
+        //            .PostAsync(Post.Notes, new
+        //            {
+        //                Note = new
+        //                {
+        //                    Title = "Title",
+        //                    Body = "<p>Something Important</p>",
+        //                }
+        //            });
 
-                context.Notes.Add(new Note()
-                {
-                    Title = "Title",
-                    Body = "Body"
-                });
+        //        var hubConnection = GetHubConnection(server.CreateHandler());
 
-                context.SaveChanges();            
+        //        hubConnection.On<dynamic>("message", (result) =>
+        //        {
+        //            Assert.Equal("[Note] Removed", $"{result.type}");
+        //            Assert.Equal(1, Convert.ToInt16(result.payload.noteId));
+        //            tcs.SetResult(true);
+        //        });
 
-                var hubConnection = GetHubConnection(server.CreateHandler());
+        //        await hubConnection.StartAsync();
 
-                hubConnection.On<dynamic>("message", (result) =>
-                {
-                    Assert.Equal("[Note] Removed", $"{result.type}");
-                    Assert.Equal(1, Convert.ToInt16(result.payload.noteId));
-                    tcs.SetResult(true);
-                });
+        //        var response = await server.CreateClient()
+        //            .DeleteAsync(Delete.Note(1));
 
-                await hubConnection.StartAsync();
+        //        response.EnsureSuccessStatusCode();
 
-                var response = await server.CreateClient()
-                    .DeleteAsync(Delete.Note(1));
-
-                response.EnsureSuccessStatusCode();
-
-                await tcs.Task;
-            }
-        }
+        //        await tcs.Task;
+        //    }
+        //}
     }
 }

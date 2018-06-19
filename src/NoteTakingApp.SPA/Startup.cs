@@ -22,9 +22,9 @@ namespace NoteTakingApp.SPA
             app.UseSpaStaticFiles();
             app.UseSpa(spa =>
             {
-                spa.Options.SourcePath = "ClientApp";                
-                if (env.IsDevelopment())
-                    spa.UseAngularCliServer("start");
+                spa.Options.SourcePath = "ClientApp";
+                //if (env.IsDevelopment())
+                //    spa.UseAngularCliServer("start");
             });
         }
     }

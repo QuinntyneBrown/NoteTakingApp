@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,9 +30,12 @@ namespace NoteTakingApp.Core.Identity
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var repository = scope.ServiceProvider.GetService<IAccessTokenRepository>();
-                
+                var validAccessTokens = await repository.GetValidAccessTokenValuesAsync();
+
+                Console.WriteLine($"VALID ACCESS TOKENS: {validAccessTokens.Count}");
+
                 if (httpContext.User.Identity.IsAuthenticated
-                    && !(await _cache.FromCacheOrServiceAsync(() => repository.GetValidAccessTokenValuesAsync(),"ValidAccessTokens")).Contains(httpContext.Request.GetAccessToken()))
+                    && !validAccessTokens.Contains(httpContext.Request.GetAccessToken()))
                 {
                     httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await httpContext.Response.WriteAsync("Unauthorized");

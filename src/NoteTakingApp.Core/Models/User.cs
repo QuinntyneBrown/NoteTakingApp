@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace NoteTakingApp.Core.Entities
 {
-    public class User: BaseEntity
+    public class User: Entity
     {
         public User()
         {

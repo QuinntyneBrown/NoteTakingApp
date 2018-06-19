@@ -35,12 +35,12 @@ namespace NoteTakingApp.Infrastructure.Data
         {
             var result = default(int);
             
-            var domainEventEntities = ChangeTracker.Entries<BaseEntity>()
+            var domainEventEntities = ChangeTracker.Entries<Entity>()
                 .Select(entityEntry => entityEntry.Entity)
                 .Where(entity => entity.DomainEvents.Any())
                 .ToArray();
             
-            foreach (var entity in ChangeTracker.Entries<BaseEntity>()
+            foreach (var entity in ChangeTracker.Entries<Entity>()
                 .Where(e => (e.State == EntityState.Added || (e.State == EntityState.Modified)))
                 .Select(x => x.Entity))
             {
@@ -49,7 +49,7 @@ namespace NoteTakingApp.Infrastructure.Data
                 entity.LastModifiedOn = DateTime.UtcNow;
             }
 
-            foreach (var item in ChangeTracker.Entries<BaseEntity>().Where(e => e.State == EntityState.Deleted))
+            foreach (var item in ChangeTracker.Entries<Entity>().Where(e => e.State == EntityState.Deleted))
             {
                 item.State = EntityState.Modified;
                 item.Entity.IsDeleted = true;
@@ -87,14 +87,7 @@ namespace NoteTakingApp.Infrastructure.Data
                 .HasQueryFilter(e => !e.IsDeleted);
 
             modelBuilder.Entity<NoteTag>()
-                .HasOne(nt => nt.Note)
-                .WithMany(n => n.NoteTags)
-                .HasForeignKey(nt => nt.NoteId);
-
-            modelBuilder.Entity<NoteTag>()
-                .HasOne(nt => nt.Tag)
-                .WithMany(t => t.NoteTags)
-                .HasForeignKey(nt => nt.TagId);
+                .HasKey(t => new { t.TagId, t.NoteId });
 
             base.OnModelCreating(modelBuilder);
         }       

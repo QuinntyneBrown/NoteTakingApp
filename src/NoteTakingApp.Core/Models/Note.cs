@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace NoteTakingApp.Core.Entities
 {
-    public class Note: BaseEntity
+    public class Note: Entity
     {
         public int NoteId { get; set; }
         public string Title { get; set; }

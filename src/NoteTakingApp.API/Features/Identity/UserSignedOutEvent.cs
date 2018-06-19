@@ -31,7 +31,7 @@ namespace NoteTakingApp.API.Features.Identity
             }                
 
             public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {
-                foreach (var accessToken in _repository.GetByUsername(notification.User.Username))
+                foreach (var accessToken in _repository.GetValidTokensByUsername(notification.User.Username))
                 {
                     accessToken.ValidTo = DateTime.UtcNow.AddYears(-1);
                 }

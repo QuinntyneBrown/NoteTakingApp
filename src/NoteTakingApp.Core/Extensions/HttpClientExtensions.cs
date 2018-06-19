@@ -25,6 +25,13 @@ namespace NoteTakingApp.Core.Extensions
             return JsonConvert.DeserializeObject<TOut>(responseText);
         }
 
+        public static async Task<HttpResponseMessage> PostAsync(this HttpClient client, string url, dynamic content)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+
+            return await client.PostAsync(url, stringContent);            
+        }
+
         public static async Task<TOut> PutAsAsync<TIn, TOut>(this HttpClient client, string url, TIn content)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");

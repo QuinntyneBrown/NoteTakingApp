@@ -6,20 +6,15 @@ namespace NoteTakingApp.Core
     public class MemoryCache : Cache
     {
         private static IMemoryCache _cache;
-        private static object _sync = new object();
-
-        public MemoryCache(IMemoryCache memoryCache)
-        {
-            _cache = memoryCache;
-
-        }
+        
+        public MemoryCache(IMemoryCache cache)
+            => _cache = cache;
 
         public override T Get<T>(string key) => (T)Get(key);
 
         public override object Get(string key)
         {
-            dynamic value;
-            _cache.TryGetValue(key, out value);
+            _cache.TryGetValue(key, out dynamic value);
             return value;
         }
 

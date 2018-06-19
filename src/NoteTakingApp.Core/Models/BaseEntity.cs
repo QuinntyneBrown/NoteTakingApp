@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace NoteTakingApp.Core.Entities
 {
-    public class BaseEntity
+    public class Entity
     {
-        public BaseEntity() => _domainEvents = new List<INotification>();
+        public Entity() => _domainEvents = new List<INotification>();
         public DateTime CreatedOn { get; set; }
         public DateTime LastModifiedOn { get; set; }
         public bool IsDeleted { get; set; }

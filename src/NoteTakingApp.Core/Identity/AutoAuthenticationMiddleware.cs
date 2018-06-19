@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using NoteTakingApp.Core.Entities;
 using NoteTakingApp.Core.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace NoteTakingApp.Core.Identity
         private readonly RequestDelegate _next;
         private readonly ITokenManager _tokenProvider;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-
+        
         public AutoAuthenticationMiddleware(
             ITokenManager tokenProvider, 
             RequestDelegate next, 
@@ -25,12 +26,16 @@ namespace NoteTakingApp.Core.Identity
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<IAppDbContext>();
+                var repository = scope.ServiceProvider.GetService<IAccessTokenRepository>();
                 var username = "quinntynebrown@gmail.com";
                 var token = _tokenProvider.Issue(username);
                 httpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
-                context.AccessTokens.Add(Entities.AccessToken.Create(token, username, _tokenProvider.GetValidToDateTime(token)));
-                await context.SaveChangesAsync(default(CancellationToken));                
+                repository.Add(new AccessToken() {
+                    Value = token,
+                    Username = username,
+                    ValidTo = _tokenProvider.GetValidToDateTime(token)
+                });
+                await repository.SaveChangesAsync(default(CancellationToken));                
                 await _next.Invoke(httpContext);
             }
         }

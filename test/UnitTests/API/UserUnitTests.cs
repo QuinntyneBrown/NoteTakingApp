@@ -5,6 +5,7 @@ using Moq;
 using NoteTakingApp.API.Features.Identity;
 using NoteTakingApp.Core.Entities;
 using NoteTakingApp.Core.Identity;
+using NoteTakingApp.Core.Interfaces;
 using NoteTakingApp.Infrastructure.Data;
 using System;
 using System.Threading;
@@ -15,6 +16,7 @@ namespace UnitTests.API
 {
     public class UserUnitTests
     {
+        private readonly Mock<ICache> _cacheMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<ITokenManager> _tokenManagerMock;
         private readonly Mock<IOptions<AuthenticationSettings>> _authenticationSettingMock;
@@ -22,6 +24,7 @@ namespace UnitTests.API
 
         public UserUnitTests()
         {
+            _cacheMock = new Mock<ICache>();
             _mediatorMock = new Mock<IMediator>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
             _tokenManagerMock = new Mock<ITokenManager>();
@@ -62,7 +65,7 @@ namespace UnitTests.API
                 context.SaveChanges();
 
 
-                var handler = new AuthenticateCommand.Handler(new AccessTokenRepository(context), context, _authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
+                var handler = new AuthenticateCommand.Handler(new AccessTokenRepository(context,_cacheMock.Object), context, _authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
 
                 var response = await handler.Handle(new AuthenticateCommand.Request()
                 {

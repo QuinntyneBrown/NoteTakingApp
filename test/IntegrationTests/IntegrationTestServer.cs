@@ -11,40 +11,16 @@ namespace IntegrationTests
         public IntegrationTestServer(IWebHostBuilder webHostBuilder)
             : base(webHostBuilder) { }
 
-        public void ResetDatabase()
+        public void SeedDatabase()
         {
             var services = (IServiceScopeFactory)Host.Services.GetService(typeof(IServiceScopeFactory));
 
             using (var scope = services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                context.Database.EnsureDeleted();
-
-                context.Database.EnsureCreated();
 
                 SeedData.Seed(context);
             }
         }
-
-        public void DropDatabase()
-        {
-            var services = (IServiceScopeFactory)Host.Services.GetService(typeof(IServiceScopeFactory));
-
-            using (var scope = services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                context.Database.EnsureDeleted();
-            }
-        }
-
-        public new void Dispose()
-        {
-            DropDatabase();
-
-            base.Dispose();
-        }
-
     }
 }

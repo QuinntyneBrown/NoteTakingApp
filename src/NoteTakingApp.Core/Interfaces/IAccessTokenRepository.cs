@@ -12,7 +12,9 @@ namespace NoteTakingApp.Core.Interfaces
 
         Task<List<string>> GetValidAccessTokenValuesAsync();
         IQueryable<AccessToken> GetValidAccessTokens();
-        List<AccessToken> GetByUsername(string username);
+        List<AccessToken> GetValidTokensByUsername(string username);
+        Task InvalidateByUsername(string username);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        void Add(AccessToken accessToken);
     }
 }

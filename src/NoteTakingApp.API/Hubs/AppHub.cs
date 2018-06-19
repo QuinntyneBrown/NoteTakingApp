@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using NoteTakingApp.Core.Identity;
+using NoteTakingApp.Core.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
@@ -11,18 +12,18 @@ namespace NoteTakingApp.API.Hubs
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class AppHub: Hub
     {
-        private IMediator _mediator;
+        private IAccessTokenRepository _repository;
 
         private static ConcurrentDictionary<string,byte> _connectedUsers = new ConcurrentDictionary<string, byte>();
 
-        public AppHub(IMediator mediator) => _mediator = mediator;
+        public AppHub(IAccessTokenRepository repository) => _repository = repository;
         public string UserName => Context.User.Identity.Name;
 
         public override async Task OnConnectedAsync()
         {
             if (!_connectedUsers.TryAdd(UserName,0))
             {
-                await _mediator.Publish(new MaliciousUseDetectedEvent(UserName));
+                await _repository.InvalidateByUsername(UserName);
                 Context.Abort();
             }
 

@@ -73,7 +73,7 @@ namespace NoteTakingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options));
-            services.AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"]);
+            services.AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], ToBoolean(Configuration["isTest"]));
             services.AddCustomMvc();
             services.AddCustomSecurity(Configuration);
             services.AddCustomSignalR();
