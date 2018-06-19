@@ -1,4 +1,3 @@
-using NoteTakingApp.API.Hubs;
 using NoteTakingApp.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;

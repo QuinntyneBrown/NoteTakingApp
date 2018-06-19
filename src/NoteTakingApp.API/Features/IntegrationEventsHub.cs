@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.SignalR;
 using NoteTakingApp.Core.Interfaces;
 using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace NoteTakingApp.API.Hubs
+namespace NoteTakingApp.API.Features
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class IntegrationEventsHub: Hub
@@ -21,7 +22,8 @@ namespace NoteTakingApp.API.Hubs
         {
             if (!_connectedUsers.TryAdd(UserName,0))
             {
-                await _repository.InvalidateByUsername(UserName);
+                await _repository.InvalidateByUsernameAsync(UserName);
+                await _repository.SaveChangesAsync(default(CancellationToken));
                 Context.Abort();
             }
 

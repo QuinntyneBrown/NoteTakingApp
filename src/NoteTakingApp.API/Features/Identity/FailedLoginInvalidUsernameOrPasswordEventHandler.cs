@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using NoteTakingApp.API.Hubs;
 using NoteTakingApp.Core.Identity;
 using System;
 using System.Threading;

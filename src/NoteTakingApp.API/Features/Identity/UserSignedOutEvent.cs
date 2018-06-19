@@ -1,11 +1,7 @@
-using NoteTakingApp.API.Hubs;
 using NoteTakingApp.Core.Entities;
 using NoteTakingApp.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,7 +26,7 @@ namespace NoteTakingApp.API.Features.Identity
             }                
 
             public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {                
-                await _repository.InvalidateByUsername(notification.User.Username);                
+                await _repository.InvalidateByUsernameAsync(notification.User.Username);                
             }
         }
     }
