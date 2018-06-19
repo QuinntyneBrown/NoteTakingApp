@@ -8,17 +8,14 @@ namespace NoteTakingApp.Core.Identity
 {
     public class TokenValidationMiddleware
     {
-        private readonly ICache _cache;
         private readonly RequestDelegate _next;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public TokenValidationMiddleware(
-            ICache cache,
             RequestDelegate next,
             IServiceScopeFactory serviceScopeFactory
             )
         {
-            _cache = cache;
             _next = next;
             _serviceScopeFactory = serviceScopeFactory;
         }

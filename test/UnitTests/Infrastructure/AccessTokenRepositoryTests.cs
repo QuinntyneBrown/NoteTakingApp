@@ -16,7 +16,6 @@ namespace UnitTests.Infrastructure
     public class AccessTokenRepositoryTests
     {
         private readonly AccessTokenRepository _accessTokenRepository;
-        private readonly ICache _cache;
         private readonly IAppDbContext _context;
         
         public AccessTokenRepositoryTests()
@@ -25,9 +24,9 @@ namespace UnitTests.Infrastructure
                 .UseInMemoryDatabase(databaseName: "AccessTokenRepositoryTests")
                 .Options;
 
-            _cache = new NoteTakingApp.Core.MemoryCache(new MemoryCache(new MemoryCacheOptions()));
+
             _context = new AppDbContext(options);
-            _accessTokenRepository = new AccessTokenRepository(_context, _cache);
+            _accessTokenRepository = new AccessTokenRepository(_context);
         }
 
         [Fact]
@@ -36,40 +35,6 @@ namespace UnitTests.Infrastructure
             Assert.NotNull(_accessTokenRepository);
         }
 
-        [Fact]
-        public async Task ShouldGetFromCacheOrServiceAsync()
-        {
-
-            _cache.Add(new List<string>()
-            {
-                "Value"
-            }, "ValidAccessTokens");
-
-            var accessTokens = await _accessTokenRepository.GetValidAccessTokenValuesAsync();
-
-            Assert.Single(accessTokens);
-            Assert.Single(_cache.Get<List<string>>("ValidAccessTokens"));
-
-        }
-
-        [Fact]
-        public async Task ShouldInvalidateCacheOnSave()
-        {
-
-            _cache.Add(new List<string>()
-            {
-                "Value"
-            }, "ValidAccessTokens");
-
-            var accessTokens = await _accessTokenRepository.GetValidAccessTokenValuesAsync();
-
-            Assert.Single(accessTokens);
-            Assert.Single(_cache.Get<List<string>>("ValidAccessTokens"));
-
-            await _accessTokenRepository.SaveChangesAsync(default(CancellationToken));
-
-            Assert.Null(_cache.Get<List<string>>("ValidAccessTokens"));
-        }
 
         [Fact]
         public async Task ShouldGetValidAccessTokens()
@@ -87,7 +52,7 @@ namespace UnitTests.Infrastructure
             var accessTokens = await _accessTokenRepository.GetValidAccessTokenValuesAsync();
 
             Assert.Single(accessTokens);
-            Assert.Single(_cache.Get<List<string>>("ValidAccessTokens"));
+
 
         }
     }

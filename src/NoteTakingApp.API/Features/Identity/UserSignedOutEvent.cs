@@ -21,25 +21,16 @@ namespace NoteTakingApp.API.Features.Identity
 
         public class Handler : INotificationHandler<DomainEvent>
         {
-            private readonly ICache _cache;
+ 
             private readonly IAccessTokenRepository _repository;
 
-            public Handler(IAccessTokenRepository repository, IHubContext<IntegrationEventsHub> hubContext, ICache cache)
+            public Handler(IAccessTokenRepository repository, IHubContext<IntegrationEventsHub> hubContext)
             {
-                _cache = cache;
                 _repository = repository;
             }                
 
-            public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {
-                foreach (var accessToken in _repository.GetValidTokensByUsername(notification.User.Username))
-                {
-                    accessToken.ValidTo = DateTime.UtcNow.AddYears(-1);
-                }
-
-                await _repository.SaveChangesAsync(cancellationToken);
-                
-                _cache.Add<List<string>>(_repository.GetValidAccessTokenValues(), "ValidAccessTokens");
-                
+            public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {                
+                await _repository.InvalidateByUsername(notification.User.Username);                
             }
         }
     }

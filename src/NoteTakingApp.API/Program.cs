@@ -81,11 +81,10 @@ namespace NoteTakingApp.API
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            services.AddMemoryCache();
-            services.AddSingleton<ICache, MemoryCache>();
+            
         }
 
-        public void Configure(IApplicationBuilder app, IAppDbContext context, ICache cache)
+        public void Configure(IApplicationBuilder app, IAppDbContext context)
         {
             if (ToBoolean(Configuration["isTest"]))
                 app.UseMiddleware<AutoAuthenticationMiddleware>();
