@@ -17,13 +17,13 @@ namespace NoteTakingApp.API.Features.Notes
 
         public class Handler : INotificationHandler<DomainEvent>
         {
-            private readonly IHubContext<AppHub> _hubContext;
+            private readonly IHubContext<IntegrationEventsHub> _context;
 
-            public Handler(IHubContext<AppHub> hubContext)
-                => _hubContext = hubContext;
+            public Handler(IHubContext<IntegrationEventsHub> hubContext)
+                => _context = hubContext;
 
             public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {
-                await _hubContext.Clients.All.SendAsync("message", new {
+                await _context.Clients.All.SendAsync("message", new {
                     Type = "[Note] Saved",
                     Payload = new { Note = NoteApiModel.FromNote(notification.Note) }
                 }, cancellationToken);

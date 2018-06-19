@@ -24,7 +24,7 @@ namespace NoteTakingApp.API.Features.Identity
             private readonly ICache _cache;
             private readonly IAccessTokenRepository _repository;
 
-            public Handler(IAccessTokenRepository repository, IHubContext<AppHub> hubContext, ICache cache)
+            public Handler(IAccessTokenRepository repository, IHubContext<IntegrationEventsHub> hubContext, ICache cache)
             {
                 _cache = cache;
                 _repository = repository;

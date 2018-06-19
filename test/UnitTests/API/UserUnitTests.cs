@@ -19,7 +19,7 @@ namespace UnitTests.API
         private readonly Mock<ICache> _cacheMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<ITokenManager> _tokenManagerMock;
-        private readonly Mock<IOptions<AuthenticationSettings>> _authenticationSettingMock;
+        private readonly Mock<IOptionsSnapshot<AuthenticationSettings>> _authenticationSettingMock;
         private readonly Mock<IMediator> _mediatorMock;
 
         public UserUnitTests()
@@ -28,7 +28,7 @@ namespace UnitTests.API
             _mediatorMock = new Mock<IMediator>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
             _tokenManagerMock = new Mock<ITokenManager>();
-            _authenticationSettingMock = new Mock<IOptions<AuthenticationSettings>>();
+            _authenticationSettingMock = new Mock<IOptionsSnapshot<AuthenticationSettings>>();
 
             _authenticationSettingMock.Setup(a => a.Value).Returns(new AuthenticationSettings() { MaximumUsers = 2 });
 
@@ -63,8 +63,7 @@ namespace UnitTests.API
                 });
 
                 context.SaveChanges();
-
-
+                
                 var handler = new AuthenticateCommand.Handler(new AccessTokenRepository(context,_cacheMock.Object), context, _authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
 
                 var response = await handler.Handle(new AuthenticateCommand.Request()

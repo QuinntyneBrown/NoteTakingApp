@@ -16,9 +16,9 @@ namespace NoteTakingApp.API.Features.Tags
 
         public class Handler : INotificationHandler<DomainEvent>
         {
-            private readonly IHubContext<AppHub> _hubContext;
+            private readonly IHubContext<IntegrationEventsHub> _hubContext;
 
-            public Handler(IHubContext<AppHub> hubContext)
+            public Handler(IHubContext<IntegrationEventsHub> hubContext)
                 => _hubContext = hubContext;
 
             public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {

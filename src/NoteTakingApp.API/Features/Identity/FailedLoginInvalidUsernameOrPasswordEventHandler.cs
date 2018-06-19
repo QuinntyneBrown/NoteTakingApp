@@ -10,9 +10,9 @@ namespace NoteTakingApp.API.Features.Identity
 {
     public class FailedLoginInvalidUsernameOrPasswordEventHandler : INotificationHandler<FailedLoginInvalidUsernameOrPasswordEvent>
     {
-        private readonly IHubContext<AppHub> _hubContext;
+        private readonly IHubContext<IntegrationEventsHub> _hubContext;
 
-        public FailedLoginInvalidUsernameOrPasswordEventHandler(IHubContext<AppHub> hubContext)
+        public FailedLoginInvalidUsernameOrPasswordEventHandler(IHubContext<IntegrationEventsHub> hubContext)
         {
             _hubContext = hubContext;
         }

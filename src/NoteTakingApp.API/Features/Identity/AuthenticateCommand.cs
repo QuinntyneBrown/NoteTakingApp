@@ -39,11 +39,11 @@ namespace NoteTakingApp.API.Features.Identity
         {
             private readonly IAccessTokenRepository _repository;
             private readonly IAppDbContext _context;
-            private readonly IOptions<AuthenticationSettings> _authenticationSettings;
+            private readonly IOptionsSnapshot<AuthenticationSettings> _authenticationSettings;
             private readonly IPasswordHasher _passwordHasher;
             private readonly ITokenManager _tokenManager;
   
-            public Handler(IAccessTokenRepository repository, IAppDbContext context, IOptions<AuthenticationSettings> authenticationSettings, IPasswordHasher passwordHasher, ITokenManager tokenManager)
+            public Handler(IAccessTokenRepository repository, IAppDbContext context, IOptionsSnapshot<AuthenticationSettings> authenticationSettings, IPasswordHasher passwordHasher, ITokenManager tokenManager)
             {
                 _context = context;
                 _authenticationSettings = authenticationSettings;

@@ -94,7 +94,7 @@ namespace NoteTakingApp.API
             app.UseTokenValidation();
             app.UseCors("CorsPolicy");
             app.UseMvc();
-            app.UseSignalR(routes => routes.MapHub<AppHub>("/hub"));
+            app.UseSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"));
             app.UseSwagger();
             app.UseSwaggerUI(options
                 => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Note Taking App API"));            
