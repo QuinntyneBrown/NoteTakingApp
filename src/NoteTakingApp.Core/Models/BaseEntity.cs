@@ -3,7 +3,7 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 
-namespace NoteTakingApp.Core.Entities
+namespace NoteTakingApp.Core.Models
 {
     public class Entity
     {

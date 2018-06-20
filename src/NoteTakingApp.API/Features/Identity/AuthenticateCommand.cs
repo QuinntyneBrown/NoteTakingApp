@@ -2,7 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Exceptions;
 using NoteTakingApp.Core.Identity;
 using NoteTakingApp.Core.Interfaces;

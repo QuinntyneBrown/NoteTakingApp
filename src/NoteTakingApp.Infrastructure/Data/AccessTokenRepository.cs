@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Interfaces;
 using System;

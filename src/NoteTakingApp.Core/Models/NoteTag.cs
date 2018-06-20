@@ -1,4 +1,4 @@
-namespace NoteTakingApp.Core.Entities
+namespace NoteTakingApp.Core.Models
 {
     public class NoteTag: Entity
     {        

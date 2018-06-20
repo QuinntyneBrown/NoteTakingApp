@@ -1,4 +1,4 @@
-﻿using NoteTakingApp.Core.Entities;
+﻿using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Identity;
 using NoteTakingApp.Core.Interfaces;
 using Microsoft.AspNetCore.Builder;

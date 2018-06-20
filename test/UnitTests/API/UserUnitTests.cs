@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Moq;
 using NoteTakingApp.API.Features.Identity;
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Identity;
 using NoteTakingApp.Core.Interfaces;
 using NoteTakingApp.Infrastructure.Data;

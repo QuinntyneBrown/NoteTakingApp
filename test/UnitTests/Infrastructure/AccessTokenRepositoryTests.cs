@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.Twitter;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
-using Moq;
+using Microsoft.Extensions.Options;
 using NoteTakingApp.Core.Interfaces;
 using NoteTakingApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -18,10 +15,10 @@ namespace UnitTests.Infrastructure
     {
         private readonly AccessTokenRepository _accessTokenRepository;
         private readonly IAppDbContext _context;
-        private readonly Mock<IDistributedCache> _distributedCacheMock;
+        private readonly IDistributedCache _distributedCache;
         public AccessTokenRepositoryTests()
         {
-            _distributedCacheMock = new Mock<IDistributedCache>();
+            _distributedCache = new MemoryDistributedCache(Options.Create(new MemoryDistributedCacheOptions()));
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "AccessTokenRepositoryTests")
@@ -29,21 +26,18 @@ namespace UnitTests.Infrastructure
 
 
             _context = new AppDbContext(options);
-            _accessTokenRepository = new AccessTokenRepository(_context,_distributedCacheMock.Object);
+            _accessTokenRepository = new AccessTokenRepository(_context, _distributedCache);
         }
 
         [Fact]
         public void ShouldNotBeNull() {
-
             Assert.NotNull(_accessTokenRepository);
         }
-
-
+        
         [Fact]
         public async Task ShouldGetValidAccessTokens()
         {
-
-            await _context.AccessTokens.AddAsync(new NoteTakingApp.Core.Entities.AccessToken()
+            await _context.AccessTokens.AddAsync(new NoteTakingApp.Core.Models.AccessToken()
             {
                 ValidTo = DateTime.UtcNow.AddYears(10),
                 Value = "",

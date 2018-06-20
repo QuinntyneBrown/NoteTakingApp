@@ -1,6 +1,6 @@
 using NoteTakingApp.API.Features.Notes;
 using NoteTakingApp.API.Features.Tags;
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 using NoteTakingApp.Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -130,7 +130,7 @@ namespace UnitTests.API
 
             using (var context = new AppDbContext(options))
             {
-                context.Notes.Add(new NoteTakingApp.Core.Entities.Note()
+                context.Notes.Add(new NoteTakingApp.Core.Models.Note()
                 {
                     NoteId = 1,
                     Title = "Quinntyne",

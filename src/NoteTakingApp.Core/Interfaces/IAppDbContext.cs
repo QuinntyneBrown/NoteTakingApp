@@ -1,4 +1,4 @@
-﻿using NoteTakingApp.Core.Entities;
+﻿using NoteTakingApp.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;

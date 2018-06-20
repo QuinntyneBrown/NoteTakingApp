@@ -1,4 +1,4 @@
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 
 namespace NoteTakingApp.API.Features.Identity
 {

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using NoteTakingApp.Core.Interfaces;
 using System.Security.Cryptography;
 
-namespace NoteTakingApp.Core.Entities
+namespace NoteTakingApp.Core.Models
 {
-    public class User: Entity
+    public class User: Entity, IAggregateRoot
     {
         public User()
         {
@@ -14,10 +14,8 @@ namespace NoteTakingApp.Core.Entities
             }
         }
 
-        public int UserId { get; set; }
-        [Required]
+        public int UserId { get; set; }        
         public string Username { get; set; }
-        [Required, DataType(DataType.Password)]
         public string Password { get; set; }
         public byte[] Salt { get; private set; }
     }

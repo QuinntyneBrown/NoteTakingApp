@@ -1,5 +1,5 @@
 using FluentValidation;
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Interfaces;
 using MediatR;

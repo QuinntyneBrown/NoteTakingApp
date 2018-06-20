@@ -1,9 +1,6 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using NoteTakingApp.Core.Identity;
 
-namespace NoteTakingApp.Core.Entities
+namespace NoteTakingApp.Core.Models
 {
     public class AccessToken: Entity
     {

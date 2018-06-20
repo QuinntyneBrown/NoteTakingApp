@@ -1,6 +1,6 @@
 using NoteTakingApp.API.Features.Notes;
 using NoteTakingApp.API.Features.Tags;
-using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Infrastructure.Data;
 using Microsoft.AspNetCore.SignalR.Client;

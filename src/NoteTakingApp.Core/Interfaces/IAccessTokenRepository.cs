@@ -1,4 +1,4 @@
-﻿using NoteTakingApp.Core.Entities;
+﻿using NoteTakingApp.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;

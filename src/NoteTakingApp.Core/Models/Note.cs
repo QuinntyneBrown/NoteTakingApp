@@ -1,8 +1,9 @@
+using NoteTakingApp.Core.Interfaces;
 using System.Collections.Generic;
 
-namespace NoteTakingApp.Core.Entities
+namespace NoteTakingApp.Core.Models
 {
-    public class Note: Entity
+    public class Note: Entity, IAggregateRoot
     {
         public int NoteId { get; set; }
         public string Title { get; set; }
