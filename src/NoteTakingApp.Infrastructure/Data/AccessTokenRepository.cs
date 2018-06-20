@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using NoteTakingApp.Core.Entities;
+using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,8 +15,13 @@ namespace NoteTakingApp.Infrastructure.Data
     public class AccessTokenRepository : IAccessTokenRepository
     {
         private readonly IAppDbContext _context;
-        public AccessTokenRepository(IAppDbContext context)
-            => _context = context;
+        private readonly IDistributedCache _distributedCache;
+        
+        public AccessTokenRepository(IAppDbContext context, IDistributedCache distributedCache)
+        {
+            _context = context;
+            _distributedCache = distributedCache;
+        }
 
         public void Add(AccessToken accessToken)
             => _context.AccessTokens.Add(accessToken);
@@ -24,14 +32,19 @@ namespace NoteTakingApp.Infrastructure.Data
         public List<string> GetValidAccessTokenValues()
             => GetValidAccessTokens().Select(x => x.Value).ToList();
 
-        public Task<List<string>> GetValidAccessTokenValuesAsync()
-            => GetValidAccessTokens().Select(x => x.Value).ToListAsync();
+        public async Task<List<string>> GetValidAccessTokenValuesAsync()
+            => await _distributedCache
+            .GetOrAdd(() => GetValidAccessTokens().Select(x => x.Value).ToListAsync(), "ValidAccessTokens");
 
         public IQueryable<AccessToken> GetValidAccessTokens()
             => _context.AccessTokens.Where(x => x.ValidTo > DateTime.UtcNow);
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken)
-            => _context.SaveChangesAsync(cancellationToken);
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            await _distributedCache.RemoveAsync("ValidAccessTokens", cancellationToken);
+
+            return await _context.SaveChangesAsync(cancellationToken);
+        }
             
         public async Task InvalidateByUsernameAsync(string username)
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NoteTakingApp.Core.Interfaces;
@@ -17,16 +18,18 @@ namespace UnitTests.Infrastructure
     {
         private readonly AccessTokenRepository _accessTokenRepository;
         private readonly IAppDbContext _context;
-        
+        private readonly Mock<IDistributedCache> _distributedCacheMock;
         public AccessTokenRepositoryTests()
         {
+            _distributedCacheMock = new Mock<IDistributedCache>();
+
             var options = new DbContextOptionsBuilder<AppDbContext>()
                 .UseInMemoryDatabase(databaseName: "AccessTokenRepositoryTests")
                 .Options;
 
 
             _context = new AppDbContext(options);
-            _accessTokenRepository = new AccessTokenRepository(_context);
+            _accessTokenRepository = new AccessTokenRepository(_context,_distributedCacheMock.Object);
         }
 
         [Fact]
@@ -51,9 +54,7 @@ namespace UnitTests.Infrastructure
 
             var accessTokens = await _accessTokenRepository.GetValidAccessTokenValuesAsync();
 
-            Assert.Single(accessTokens);
-
-
+            Assert.Single(accessTokens);            
         }
     }
 }

@@ -21,12 +21,11 @@ namespace NoteTakingApp.API.Features.Identity
             private readonly IAccessTokenRepository _repository;
 
             public Handler(IAccessTokenRepository repository, IHubContext<IntegrationEventsHub> hubContext)
-            {
-                _repository = repository;
-            }                
+                => _repository = repository;
 
             public async Task Handle(DomainEvent notification, CancellationToken cancellationToken) {                
-                await _repository.InvalidateByUsernameAsync(notification.User.Username);                
+                await _repository.InvalidateByUsernameAsync(notification.User.Username);
+                await _repository.SaveChangesAsync(cancellationToken);
             }
         }
     }

@@ -12,9 +12,7 @@ namespace NoteTakingApp.API.Features.Identity
         private readonly IHubContext<IntegrationEventsHub> _hubContext;
 
         public FailedLoginInvalidUsernameOrPasswordEventHandler(IHubContext<IntegrationEventsHub> hubContext)
-        {
-            _hubContext = hubContext;
-        }
+            => _hubContext = hubContext;
 
         public Task Handle(FailedLoginInvalidUsernameOrPasswordEvent notification, CancellationToken cancellationToken)
         {

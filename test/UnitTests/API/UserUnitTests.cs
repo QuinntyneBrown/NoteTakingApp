@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Moq;
 using NoteTakingApp.API.Features.Identity;
@@ -16,6 +17,7 @@ namespace UnitTests.API
 {
     public class UserUnitTests
     {
+        private readonly Mock<IDistributedCache> _distributedCacheMock;
         private readonly Mock<IPasswordHasher> _passwordHasherMock;
         private readonly Mock<ITokenManager> _tokenManagerMock;
         private readonly Mock<IOptionsSnapshot<AuthenticationSettings>> _authenticationSettingMock;
@@ -23,6 +25,7 @@ namespace UnitTests.API
 
         public UserUnitTests()
         {
+            _distributedCacheMock = new Mock<IDistributedCache>();
             _mediatorMock = new Mock<IMediator>();
             _passwordHasherMock = new Mock<IPasswordHasher>();
             _tokenManagerMock = new Mock<ITokenManager>();
@@ -62,7 +65,7 @@ namespace UnitTests.API
 
                 context.SaveChanges();
                 
-                var handler = new AuthenticateCommand.Handler(new AccessTokenRepository(context), context, _authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
+                var handler = new AuthenticateCommand.Handler(new AccessTokenRepository(context,_distributedCacheMock.Object), context, _authenticationSettingMock.Object, _passwordHasherMock.Object, _tokenManagerMock.Object);
 
                 var response = await handler.Handle(new AuthenticateCommand.Request()
                 {
