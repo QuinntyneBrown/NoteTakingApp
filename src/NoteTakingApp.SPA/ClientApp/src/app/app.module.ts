@@ -20,6 +20,7 @@ import { SettingsModule } from './settings/settings.module';
 import { SharedModule } from './shared/shared.module';
 import { LaunchSettings } from './core/launch-settings';
 import { map } from 'rxjs/operators';
+import { AppStore } from './app-store';
 
 @NgModule({
   declarations: [AppComponent, AnonymousMasterPageComponent, MasterPageComponent],
@@ -38,12 +39,15 @@ import { map } from 'rxjs/operators';
     TagsModule,
     UsersModule
   ],
-  providers: [{ provide: baseUrl, useValue: 'http://localhost:4023/' }, {
-    provide: APP_INITIALIZER,
-    useFactory: AppModule.onLaunch,
-    multi: true,
-    deps: [HttpClient, LaunchSettings]
-  }],
+  providers: [
+    AppStore,
+    { provide: baseUrl, useValue: 'http://localhost:4023/' },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: AppModule.onLaunch,
+      multi: true,
+      deps: [HttpClient, LaunchSettings]
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

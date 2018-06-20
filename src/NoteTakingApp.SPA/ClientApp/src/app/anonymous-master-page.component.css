@@ -9,3 +9,9 @@
   position: relative;
   width: 100vw;
 }
+
+
+mat-progress-bar {
+  position:fixed;
+  top:0;
+}

@@ -7,6 +7,7 @@ import { AuthService } from '../core/auth.service';
 import { LoginRedirectService } from '../core/redirect.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorService } from '../core/error.service';
+import { AppStore } from '../app-store';
 
 @Component({
   templateUrl: './login.component.html',
@@ -15,17 +16,14 @@ import { ErrorService } from '../core/error.service';
 })
 export class LoginComponent {
   constructor(
+    private _appStore: AppStore,
     private _authService: AuthService,
     private _elementRef: ElementRef,
     private _errorService: ErrorService,
     private _loginRedirectService: LoginRedirectService,
     private _renderer: Renderer
   ) {}
-
-  ngOnInit() {
-    this._authService.logout();
-  }
-
+  
   public onDestroy: Subject<void> = new Subject<void>();
 
   ngAfterContentInit() {
@@ -53,6 +51,9 @@ export class LoginComponent {
   }
 
   public tryToLogin($event) {
+    this.form.disable();
+    this._appStore.isBusy$.next(true);
+
     this._authService
       .tryToLogin({
         username: $event.value.username,
@@ -60,8 +61,15 @@ export class LoginComponent {
       })
       .pipe(takeUntil(this.onDestroy))
       .subscribe(
-        () => this._loginRedirectService.redirectPreLogin(),
-        errorResponse => this.handleErrorResponse(errorResponse)
+      () => {
+        this._appStore.isBusy$.next(false);
+        this._loginRedirectService.redirectPreLogin()
+      },
+      errorResponse => {
+        this.form.enable();
+        this._appStore.isBusy$.next(false);
+        this.handleErrorResponse(errorResponse)
+        }
       );
   }
 

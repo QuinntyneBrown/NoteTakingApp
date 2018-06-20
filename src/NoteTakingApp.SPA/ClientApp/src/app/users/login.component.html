@@ -5,7 +5,7 @@
   <mat-card-title>
     {{ "Login" | translate }}
   </mat-card-title>
-  <form novalidate autocomplete="off" spellcheck="false" [formGroup]="form">
+  <form novalidate autocomplete="off" spellcheck="false" [formGroup]="form" [attr.disabled]="true">
     <mat-form-field>
       <input matInput placeholder="{{ 'Username' | translate }}" id="username" formControlName="username" required>
     </mat-form-field>
