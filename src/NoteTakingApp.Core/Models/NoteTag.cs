@@ -2,7 +2,7 @@ using NoteTakingApp.Core.Common;
 
 namespace NoteTakingApp.Core.Models
 {
-    public class NoteTag: Entity
+    public class NoteTag
     {        
         public int NoteId { get; set; }
         public int TagId { get; set; }

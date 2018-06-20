@@ -77,10 +77,7 @@ namespace NoteTakingApp.Infrastructure.Data
         {
             modelBuilder.Entity<Note>()
                 .HasQueryFilter(e => !e.IsDeleted);
-
-            modelBuilder.Entity<NoteTag>()
-                .HasQueryFilter(e => !e.IsDeleted);
-
+            
             modelBuilder.Entity<Tag>()
                 .HasQueryFilter(e => !e.IsDeleted);
 

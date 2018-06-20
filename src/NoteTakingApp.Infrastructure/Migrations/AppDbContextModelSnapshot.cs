@@ -65,12 +65,6 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<int>("NoteId");
 
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime>("LastModifiedOn");
-
                     b.HasKey("TagId", "NoteId");
 
                     b.HasIndex("NoteId");

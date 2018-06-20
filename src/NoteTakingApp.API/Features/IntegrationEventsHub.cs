@@ -18,9 +18,7 @@ namespace NoteTakingApp.API.Features
         public string UserName => Context.User.Identity.Name;
 
         public override async Task OnConnectedAsync()
-        {
-            Console.WriteLine($"USERNAME: {UserName}");
-
+        {            
             if (!_connectedUsers.TryAdd(UserName,0))
             {
                 await _repository.InvalidateByUsernameAsync(UserName);
