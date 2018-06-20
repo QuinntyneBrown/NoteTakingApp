@@ -1,8 +1,9 @@
-﻿using System;
+﻿using NoteTakingApp.Core.Common;
+using System;
 
 namespace NoteTakingApp.Core.Models
 {
-    public class AccessToken: Entity
+    public class AccessToken
     {
         public int AccessTokenId { get; set; }
         public string Value { get; set; }

@@ -1,10 +1,8 @@
 using MediatR;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Collections.Generic;
-using NoteTakingApp.Core.Interfaces;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using NoteTakingApp.Core.Interfaces;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NoteTakingApp.API.Features.Identity
 {

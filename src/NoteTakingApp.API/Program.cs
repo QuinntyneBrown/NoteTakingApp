@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NoteTakingApp.API.Features;
+using NoteTakingApp.API.Features.Notes;
+using NoteTakingApp.API.Features.Tags;
 using NoteTakingApp.Core.Behaviours;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Identity;
@@ -14,7 +17,6 @@ using NoteTakingApp.Infrastructure.Data;
 using NoteTakingApp.Infrastructure.Extensions;
 using System;
 using System.Linq;
-using static System.Convert;
 
 namespace NoteTakingApp.API
 {
@@ -70,31 +72,35 @@ namespace NoteTakingApp.API
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
-        {            
-            services.AddDistributedMemoryCache();
-            services.Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options));
-            services.AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], ToBoolean(Configuration["isTest"]));
-            services.AddCustomMvc();
-            services.AddCustomSecurity(Configuration);
-            services.AddCustomSignalR();
-            services.AddCustomSwagger();
-            services.AddMediatR(typeof(Startup));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));            
+        {
+            services.AddDistributedMemoryCache()
+                .Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options))
+                .AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], Configuration.GetValue<bool>("isTest"))
+                .AddCustomMvc()
+                .AddCustomSecurity(Configuration)
+                .AddCustomSignalR()
+                .AddCustomSwagger()
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+                .AddTransient<IValidator<SaveNoteCommand.Request>, SaveNoteCommand.Validator>()
+                .AddTransient<IValidator<RemoveNoteCommand.Request>, RemoveNoteCommand.Validator>()
+                .AddTransient<IValidator<SaveTagCommand.Request>, SaveTagCommand.Validator>()
+                .AddTransient<IValidator<RemoveTagCommand.Request>, RemoveTagCommand.Validator>()
+                .AddMediatR(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IAppDbContext context)
         {
-            if (ToBoolean(Configuration["isTest"]))
+            if (Configuration.GetValue<bool>("isTest"))
                 app.UseMiddleware<AutoAuthenticationMiddleware>();
 
-            app.UseAuthentication();
-            app.UseTokenValidation();
-            app.UseCors("CorsPolicy");
-            app.UseMvc();
-            app.UseSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"));
-            app.UseSwagger();
-            app.UseSwaggerUI(options
+            app.UseAuthentication()
+                .UseTokenValidation()
+                .UseCors("CorsPolicy")
+                .UseMvc()
+                .UseSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"))
+                .UseSwagger()
+                .UseSwaggerUI(options
                 => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Note Taking App API"));            
         }
     }

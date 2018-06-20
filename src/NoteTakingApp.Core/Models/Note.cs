@@ -1,3 +1,4 @@
+using NoteTakingApp.Core.Common;
 using NoteTakingApp.Core.Interfaces;
 using System.Collections.Generic;
 

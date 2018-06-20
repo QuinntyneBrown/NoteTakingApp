@@ -1,3 +1,5 @@
+using NoteTakingApp.Core.Common;
+
 namespace NoteTakingApp.Core.Models
 {
     public class NoteTag: Entity

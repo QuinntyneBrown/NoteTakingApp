@@ -12,7 +12,6 @@ namespace NoteTakingApp.API.Features
     public class IntegrationEventsHub: Hub
     {
         private IAccessTokenRepository _repository;
-
         private static ConcurrentDictionary<string,byte> _connectedUsers = new ConcurrentDictionary<string, byte>();
 
         public IntegrationEventsHub(IAccessTokenRepository repository) => _repository = repository;
@@ -20,6 +19,8 @@ namespace NoteTakingApp.API.Features
 
         public override async Task OnConnectedAsync()
         {
+            Console.WriteLine($"USERNAME: {UserName}");
+
             if (!_connectedUsers.TryAdd(UserName,0))
             {
                 await _repository.InvalidateByUsernameAsync(UserName);
@@ -33,7 +34,6 @@ namespace NoteTakingApp.API.Features
         public override Task OnDisconnectedAsync(Exception exception)
         {
             _connectedUsers.TryRemove(UserName, out _);
-
             return base.OnDisconnectedAsync(exception);
         }
 

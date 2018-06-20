@@ -1,4 +1,5 @@
-﻿using NoteTakingApp.Core.Interfaces;
+﻿using NoteTakingApp.Core.Common;
+using NoteTakingApp.Core.Interfaces;
 using System.Security.Cryptography;
 
 namespace NoteTakingApp.Core.Models

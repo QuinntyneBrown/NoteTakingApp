@@ -9,7 +9,7 @@ namespace IntegrationTests
     public class DistributedCacheScenarios : ScenarioBase
     {
         [Fact]
-        public void CanAddItem()
+        public void ShouldNotBeNull()
         {
             using (var server = CreateServer())
             {

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
+using NoteTakingApp.Core.Common;
 
 namespace NoteTakingApp.Infrastructure.Data
 {    

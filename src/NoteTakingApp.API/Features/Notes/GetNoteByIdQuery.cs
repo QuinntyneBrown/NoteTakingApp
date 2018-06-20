@@ -8,14 +8,6 @@ namespace NoteTakingApp.API.Features.Notes
 {
     public class GetNoteByIdQuery
     {
-        public class Validator : AbstractValidator<Request>
-        {
-            public Validator()
-            {
-                RuleFor(request => request.NoteId).NotEqual(0);
-            }
-        }
-
         public class Request : IRequest<Response> {
             public int NoteId { get; set; }
         }

@@ -1,9 +1,8 @@
-using NoteTakingApp.Core.Interfaces;
 using MediatR;
 using System;
 using System.Collections.Generic;
 
-namespace NoteTakingApp.Core.Models
+namespace NoteTakingApp.Core.Common
 {
     public class Entity
     {

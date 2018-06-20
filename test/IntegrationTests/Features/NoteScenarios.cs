@@ -43,10 +43,10 @@ namespace IntegrationTests.Features
                         }
                     });
 
-                Assert.True(response.NoteId == 1);
-
-                await tcs.Task;
+                Assert.True(response.NoteId == 1);    
             }
+
+            await tcs.Task;
         }
 
         [Fact]
@@ -144,42 +144,6 @@ namespace IntegrationTests.Features
                 Assert.True(saveResponse.NoteId == 1);
             }
         }
-        
-        //[Fact]
-        //public async Task ShouldDeleteNote()
-        //{
-        //    var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-        //    using (var server = CreateServer())
-        //    {
-        //        await server.CreateClient()
-        //            .PostAsync(Post.Notes, new
-        //            {
-        //                Note = new
-        //                {
-        //                    Title = "Title",
-        //                    Body = "<p>Something Important</p>",
-        //                }
-        //            });
-
-        //        var hubConnection = GetHubConnection(server.CreateHandler());
-
-        //        hubConnection.On<dynamic>("message", (result) =>
-        //        {
-        //            Assert.Equal("[Note] Removed", $"{result.type}");
-        //            Assert.Equal(1, Convert.ToInt16(result.payload.noteId));
-        //            tcs.SetResult(true);
-        //        });
-
-        //        await hubConnection.StartAsync();
-
-        //        var response = await server.CreateClient()
-        //            .DeleteAsync(Delete.Note(1));
-
-        //        response.EnsureSuccessStatusCode();
-
-        //        await tcs.Task;
-        //    }
-        //}
+       
     }
 }
