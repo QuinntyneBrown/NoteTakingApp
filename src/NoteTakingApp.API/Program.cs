@@ -70,16 +70,7 @@ namespace NoteTakingApp.API
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
-        {
-            //services.AddDistributedSqlServerCache(options =>
-            //{
-            //    options.ConnectionString =
-            //        @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NoteTakingApp;" +
-            //        @"Integrated Security=True;";
-            //    options.SchemaName = "dbo";
-            //    options.TableName = "DistributedCache";
-            //});
-
+        {            
             services.AddDistributedMemoryCache();
             services.Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options));
             services.AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], ToBoolean(Configuration["isTest"]));
@@ -89,8 +80,7 @@ namespace NoteTakingApp.API
             services.AddCustomSwagger();
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));            
         }
 
         public void Configure(IApplicationBuilder app, IAppDbContext context)
