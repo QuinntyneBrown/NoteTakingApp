@@ -21,11 +21,8 @@ namespace NoteTakingApp.API.Features.Identity
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken) {
                 var user = await _context.Users.SingleAsync(x => x.Username == request.Username);
-
                 user.RaiseDomainEvent(new UserSignedOutEvent.DomainEvent(user));
-
                 await _context.SaveChangesAsync(cancellationToken);
-
                 return new Response() { };
             }
         }

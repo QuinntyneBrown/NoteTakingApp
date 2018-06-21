@@ -43,7 +43,9 @@ export class HubClient {
         this._ngZone.run(() => this.messages$.next(value));
       });
 
-      this._connection.start().then(() => resolve(),() => reject());
+      this._connection.start().then(() => resolve(), () => {        
+        reject();        
+      });
 
       this._connection.onclose((error) => {
         this._loginRedirectService.redirectToLogin();

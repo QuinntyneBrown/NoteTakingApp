@@ -57,18 +57,18 @@ namespace NoteTakingApp.API.Features.Identity
                 var user = await _context.Users
                     .SingleOrDefaultAsync(x => x.Username.ToLower() == request.Username.ToLower());
 
-                if (user == null) throw new DomainException();
+                if (user == null) throw new DomainException("Invalid Username!");
 
                 if (!ValidateUser(user, _passwordHasher.HashPassword(user.Salt, request.Password)))
-                    throw new DomainException();
+                    throw new DomainException("Invalid Password!");
 
                 var validAccessTokens = _repository.GetValidAccessTokens();
 
                 if (validAccessTokens.Count() >= _authenticationSettings.Value.MaximumUsers)
-                    throw new DomainException();
+                    throw new DomainException("Exceeded Maximum Users!");
 
                 if (validAccessTokens.Where(x => x.Username == request.Username).SingleOrDefault() != null)
-                    throw new DomainException();
+                    throw new DomainException("Already logged In!");
 
                 var accessToken = _tokenManager.Issue(request.Username);
 

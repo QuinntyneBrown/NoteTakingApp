@@ -38,7 +38,7 @@ namespace NoteTakingApp.API.Features.Notes
                 var note = await _context.Notes
                     .Include(x => x.NoteTags)
                     .Include("NoteTags.Tag")
-                    .SingleOrDefaultAsync(x => request.Note.NoteId == x.NoteId);
+                    .SingleOrDefaultAsync(x => request.Note.NoteId == x.NoteId,cancellationToken);
 
                 if (note == null) _context.Notes.Add(note = new Note());
 

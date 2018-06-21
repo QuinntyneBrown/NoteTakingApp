@@ -1,6 +1,5 @@
-using FluentValidation;
-using NoteTakingApp.Core.Interfaces;
 using MediatR;
+using NoteTakingApp.Core.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +25,7 @@ namespace NoteTakingApp.API.Features.Notes
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
                 => new Response()
                 {
-                    Note = NoteApiModel.FromNote(await _context.Notes.FindAsync(request.NoteId))
+                    Note = NoteApiModel.FromNote(await _context.Notes.FindAsync(request.NoteId,cancellationToken))
                 };            
         }
     }

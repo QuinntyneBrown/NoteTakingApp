@@ -25,16 +25,14 @@ namespace NoteTakingApp.API.Features.Notes
             public Handler(IAppDbContext context) => _context = context;
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-            {
-                return new Response()
+                => new Response()
                 {
                     Note = NoteApiModel.FromNote(await _context.Notes
                         .Include(x => x.NoteTags)
                         .Include("NoteTags.Tag")
                         .Where(x => x.Slug == request.Slug)
-                        .SingleAsync())
+                        .SingleAsync(cancellationToken))
                 };
-            }
         }
     }
 }

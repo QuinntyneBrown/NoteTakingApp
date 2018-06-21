@@ -9,33 +9,24 @@ namespace NoteTakingApp.Core.Identity
     public class TokenValidationMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-
-        public TokenValidationMiddleware(
-            RequestDelegate next,
-            IServiceScopeFactory serviceScopeFactory
-            )
-        {
-            _next = next;
-            _serviceScopeFactory = serviceScopeFactory;
-        }
         
+        public TokenValidationMiddleware(RequestDelegate next)
+            => _next = next;
+
         public async Task Invoke(HttpContext httpContext)
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
+            var repository = httpContext.RequestServices.GetService<IAccessTokenRepository>();
+            var validAccessTokens = await repository.GetValidAccessTokenValuesAsync();
+
+            if (httpContext.User.Identity.IsAuthenticated
+                && !httpContext.Request.Path.Value.StartsWith("/hub")
+                && !validAccessTokens.Contains(httpContext.Request.GetAccessToken()))
             {
-                var repository = scope.ServiceProvider.GetService<IAccessTokenRepository>();
-                var validAccessTokens = await repository.GetValidAccessTokenValuesAsync();
-                
-                if (httpContext.User.Identity.IsAuthenticated                   
-                    && !validAccessTokens.Contains(httpContext.Request.GetAccessToken()))
-                {
-                    httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    await httpContext.Response.WriteAsync("Unauthorized");
-                }
-                else
-                    await _next.Invoke(httpContext);
+                httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await httpContext.Response.WriteAsync("Unauthorized");
             }
+            else
+                await _next.Invoke(httpContext);
         }
     }
 }
