@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NoteTakingApp.API.Features;
+using NoteTakingApp.API.Features.Identity;
 using NoteTakingApp.API.Features.Notes;
 using NoteTakingApp.API.Features.Tags;
 using NoteTakingApp.Core.Behaviours;
@@ -25,9 +26,7 @@ namespace NoteTakingApp.API
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder().Build();
-
             ProcessDbCommands(args, host);
-
             host.Run();
         }
         
@@ -80,8 +79,8 @@ namespace NoteTakingApp.API
                 .AddCustomSecurity(Configuration)
                 .AddCustomSignalR()
                 .AddCustomSwagger()
-                .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>))
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+                .AddTransient<IValidator<AuthenticateCommand.Request>, AuthenticateCommand.Validator>()
                 .AddTransient<IValidator<SaveNoteCommand.Request>, SaveNoteCommand.Validator>()
                 .AddTransient<IValidator<RemoveNoteCommand.Request>, RemoveNoteCommand.Validator>()
                 .AddTransient<IValidator<SaveTagCommand.Request>, SaveTagCommand.Validator>()
