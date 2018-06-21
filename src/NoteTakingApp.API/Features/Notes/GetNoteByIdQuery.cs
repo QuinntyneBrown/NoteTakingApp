@@ -25,7 +25,7 @@ namespace NoteTakingApp.API.Features.Notes
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
                 => new Response()
                 {
-                    Note = NoteApiModel.FromNote(await _context.Notes.FindAsync(request.NoteId,cancellationToken))
+                    Note = NoteApiModel.FromNote(await _context.Notes.FindAsync(request.NoteId))
                 };            
         }
     }

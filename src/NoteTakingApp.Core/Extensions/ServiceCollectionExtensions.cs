@@ -18,14 +18,12 @@ namespace NoteTakingApp.Core.Extensions
 {
     public static class ServiceCollectionExtensions
     {        
-        public static IServiceCollection AddCustomMvc(this IServiceCollection services)
+        public static IMvcBuilder AddCustomMvc(this IServiceCollection services)
         {
-            services.AddMvc(options =>
+            return services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-            }).AddControllersAsServices();
-
-            return services;
+            }).AddControllersAsServices();            
         }
 
         public static IServiceCollection AddCustomSignalR(this IServiceCollection services)

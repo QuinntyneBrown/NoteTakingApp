@@ -5,6 +5,7 @@ using NoteTakingApp.Core.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using NoteTakingApp.Core.DomainEvents;
 
 namespace NoteTakingApp.API.Features.Tags
 {
@@ -42,7 +43,7 @@ namespace NoteTakingApp.API.Features.Tags
 
                 tag.Slug = request.Tag.Name.GenerateSlug();
 
-                tag.RaiseDomainEvent(new TagSavedEvent.DomainEvent(tag));
+                tag.RaiseDomainEvent(new TagSavedDomainEvent(tag));
 
                 await _context.SaveChangesAsync(cancellationToken);
 

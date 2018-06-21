@@ -3,6 +3,7 @@ using NoteTakingApp.Core.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
+using NoteTakingApp.Core.DomainEvents;
 
 namespace NoteTakingApp.API.Features.Notes
 {
@@ -32,7 +33,7 @@ namespace NoteTakingApp.API.Features.Notes
             {
                 var note = await _context.Notes.FindAsync(request.NoteId);
                 _context.Notes.Remove(note);
-                note.RaiseDomainEvent(new NoteRemovedEvent.DomainEvent(note.NoteId));
+                note.RaiseDomainEvent(new NoteRemovedDomainEvent(note.NoteId));
                 await _context.SaveChangesAsync(cancellationToken);
                 return new Response() { };
             }

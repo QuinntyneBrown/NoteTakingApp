@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using NoteTakingApp.Core.DomainEvents;
 
 namespace NoteTakingApp.API.Features.Notes
 {
@@ -58,7 +59,7 @@ namespace NoteTakingApp.API.Features.Notes
                     });
                 }
 
-                note.RaiseDomainEvent(new NoteSavedEvent.DomainEvent(note));
+                note.RaiseDomainEvent(new NoteSavedDomainEvent(note));
 
                 await _context.SaveChangesAsync(cancellationToken);
 

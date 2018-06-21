@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +10,7 @@ using NoteTakingApp.API.Features;
 using NoteTakingApp.API.Features.Identity;
 using NoteTakingApp.API.Features.Notes;
 using NoteTakingApp.API.Features.Tags;
+using NoteTakingApp.Core;
 using NoteTakingApp.Core.Behaviours;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Identity;
@@ -72,19 +73,16 @@ namespace NoteTakingApp.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCustomMvc()
+                .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
+
             services.AddDistributedMemoryCache()
                 .Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options))
                 .AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], Configuration.GetValue<bool>("isTest"))
-                .AddCustomMvc()
                 .AddCustomSecurity(Configuration)
                 .AddCustomSignalR()
                 .AddCustomSwagger()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-                .AddTransient<IValidator<AuthenticateCommand.Request>, AuthenticateCommand.Validator>()
-                .AddTransient<IValidator<SaveNoteCommand.Request>, SaveNoteCommand.Validator>()
-                .AddTransient<IValidator<RemoveNoteCommand.Request>, RemoveNoteCommand.Validator>()
-                .AddTransient<IValidator<SaveTagCommand.Request>, SaveTagCommand.Validator>()
-                .AddTransient<IValidator<RemoveTagCommand.Request>, RemoveTagCommand.Validator>()
                 .AddMediatR(typeof(Startup));
         }
 

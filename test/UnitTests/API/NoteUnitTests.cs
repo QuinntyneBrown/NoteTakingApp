@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using NoteTakingApp.Core.DomainEvents;
 
 namespace UnitTests.API
 {
@@ -24,7 +25,7 @@ namespace UnitTests.API
                 .Options;
 
             var mediator = new Mock<IMediator>();
-            mediator.Setup(m => m.Publish(It.IsAny<NoteSavedEvent.DomainEvent>(), It.IsAny<CancellationToken>()))
+            mediator.Setup(m => m.Publish(It.IsAny<NoteSavedDomainEvent>(), It.IsAny<CancellationToken>()))
                 .Verifiable();
 
             using (var context = new AppDbContext(options, mediator.Object))
@@ -151,7 +152,7 @@ namespace UnitTests.API
         public async Task ShouldHandleRemoveNoteCommandRequest()
         {
             var mediator = new Mock<IMediator>();
-            mediator.Setup(m => m.Publish(It.IsAny<NoteRemovedEvent.DomainEvent>(), It.IsAny<CancellationToken>()))
+            mediator.Setup(m => m.Publish(It.IsAny<NoteRemovedDomainEvent>(), It.IsAny<CancellationToken>()))
                 .Verifiable();
 
             var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -187,7 +188,7 @@ namespace UnitTests.API
                 .Options;
 
             var mediator = new Mock<IMediator>();
-            mediator.Setup(m => m.Publish(It.IsAny<NoteSavedEvent.DomainEvent>(), It.IsAny<CancellationToken>()))
+            mediator.Setup(m => m.Publish(It.IsAny<NoteSavedDomainEvent>(), It.IsAny<CancellationToken>()))
                 .Verifiable();
 
             using (var context = new AppDbContext(options, mediator.Object))

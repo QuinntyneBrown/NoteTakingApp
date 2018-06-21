@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NoteTakingApp.Core.DomainEvents;
 using NoteTakingApp.Core.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace NoteTakingApp.API.Features.Identity
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken) {
                 var user = await _context.Users.SingleAsync(x => x.Username == request.Username);
-                user.RaiseDomainEvent(new UserSignedOutEvent.DomainEvent(user));
+                user.RaiseDomainEvent(new UserSignedOutDomainEvent(user));
                 await _context.SaveChangesAsync(cancellationToken);
                 return new Response() { };
             }

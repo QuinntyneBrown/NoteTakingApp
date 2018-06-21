@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NoteTakingApp.API.Features
+namespace NoteTakingApp.Core
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class IntegrationEventsHub: Hub
