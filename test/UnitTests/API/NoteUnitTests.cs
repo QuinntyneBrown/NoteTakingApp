@@ -32,11 +32,9 @@ namespace UnitTests.API
             {
                 var handler = new SaveNoteCommand.Handler(context);
 
-                context.Tags.Add(new Tag()
-                {
-                    TagId = 1,
-                    Name = "Angular"
-                });
+                var tag = new Tag();
+                tag.Update("Angular");
+                context.Tags.Add(tag);
 
                 context.SaveChanges();
 
@@ -65,8 +63,7 @@ namespace UnitTests.API
                 context.Notes.Add(new Note()
                 {
                     NoteId = 1,
-                    Title = "Quinntyne",
-
+                    Title = "Quinntyne"
                 });
 
                 context.SaveChanges();
@@ -91,12 +88,11 @@ namespace UnitTests.API
 
             using (var context = new AppDbContext(options))
             {
-                context.Tags.Add(new Tag()
-                {
-                    TagId = 1,
-                    Name = "Angular",
-                    Slug = "angular"
-                });
+                var tag = new Tag();
+
+                tag.Update("Angular");
+
+                context.Tags.Add(tag);
 
                 context.Notes.Add(new Note()
                 {
@@ -104,7 +100,7 @@ namespace UnitTests.API
                     Title = "Quinntyne",
                     Slug = "quinntyne",
                     NoteTags = new List<NoteTag>() {
-                        new NoteTag() { TagId = 1 }
+                        new NoteTag() { TagId = tag.TagId }
                     }
                 });
 
@@ -134,8 +130,7 @@ namespace UnitTests.API
                 context.Notes.Add(new NoteTakingApp.Core.Models.Note()
                 {
                     NoteId = 1,
-                    Title = "Quinntyne",
-                    
+                    Title = "Quinntyne"                    
                 });
 
                 context.SaveChanges();

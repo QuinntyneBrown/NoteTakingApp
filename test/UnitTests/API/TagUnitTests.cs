@@ -40,7 +40,8 @@ namespace UnitTests.API
                     }
                 }, default(CancellationToken));
 
-                Assert.Equal(1, response.TagId);
+                
+                Assert.Equal(response.TagId, context.Tags.Where(x => x.Name == "Quinntyne").Single().TagId);
             }
         }
 
@@ -53,12 +54,11 @@ namespace UnitTests.API
 
             using (var context = new AppDbContext(options))
             {
-                context.Tags.Add(new Tag()
-                {
-                    TagId = 1,
-                    Name = "Quinntyne",
-                    
-                });
+                var tag = new Tag() { TagId = 1 };
+
+                tag.Update("Quinntyne");
+
+                context.Tags.Add(tag);
 
                 context.SaveChanges();
 
@@ -89,16 +89,16 @@ namespace UnitTests.API
                     Slug = "angular"
                 });
 
-                context.Tags.Add(new Tag()
-                {
-                    TagId = 1,
-                    Name = "Routing",
-                    Slug = "routing",
-                    NoteTags = new List<NoteTag>()
+                var tag = new Tag() { TagId = 1 };
+
+                tag.Update("Routing");
+
+                tag.NoteTags = new List<NoteTag>()
                     {
                         new NoteTag() { NoteId = 1 }
-                    }
-                });
+                    };
+
+                context.Tags.Add(tag);
                 
                 context.SaveChanges();
 
@@ -122,13 +122,15 @@ namespace UnitTests.API
                 .Options;
 
             using (var context = new AppDbContext(options))
-            {                
-                context.Tags.Add(new NoteTakingApp.Core.Models.Tag()
+            {
+                var tag = new Tag()
                 {
-                    TagId = 1,
-                    Name = "Quinntyne",
-                    
-                });
+                    TagId = 1
+                };
+
+                tag.Update("Quinntyne");
+
+                context.Tags.Add(tag);
 
                 context.SaveChanges();
 
@@ -153,12 +155,11 @@ namespace UnitTests.API
 
             using (var context = new AppDbContext(options, mediator.Object))
             {
-                context.Tags.Add(new Tag()
-                {
-                    TagId = 1,
-                    Name = "Quinntyne",
-                    
-                });
+                var tag = new Tag() { TagId = 1 };
+
+                tag.Update("Quinntyne");
+
+                context.Tags.Add(tag);
 
                 context.SaveChanges();
 
@@ -186,12 +187,11 @@ namespace UnitTests.API
 
             using (var context = new AppDbContext(options, mediator.Object))
             {
-                context.Tags.Add(new Tag()
-                {
-                    TagId = 1,
-                    Name = "Quinntyne",
-                    
-                });
+                var tag = new Tag() { TagId = 1 };
+
+                tag.Update("Quinntyne");
+
+                context.Tags.Add(tag);
 
                 context.SaveChanges();
 

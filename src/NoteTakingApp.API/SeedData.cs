@@ -52,10 +52,19 @@ namespace NoteTakingApp.API
             public static void Seed(AppDbContext context)
             {
                 if (context.Tags.IgnoreQueryFilters().FirstOrDefault(x => x.Name == "Angular") == null)
-                    context.Tags.Add(new Tag() { Name = "Angular", Slug = "Angular".GenerateSlug() });
+                {
+                    var tag = new Tag();
+                    tag.Update("Angular");
+                    context.Tags.Add(tag);
+                }
 
                 if (context.Tags.IgnoreQueryFilters().FirstOrDefault(x => x.Name == "ASP.NET Core") == null)
-                    context.Tags.Add(new Tag() { Name = "ASP.NET Core", Slug = "ASP.NET Core".GenerateSlug() });
+                {
+                    var tag = new Tag();
+                    tag.Update("ASP.NET Core");
+                    context.Tags.Add(tag);
+                }
+                    
 
                 context.SaveChanges();
             }

@@ -10,7 +10,7 @@ namespace NoteTakingApp.API.Features.Tags
         public int TagId { get; set; }
         public string Name { get; set; }
         public string Slug { get; set; }
-        public ICollection<NoteApiModel> Notes { get; set; }
+        public ICollection<NoteApiModel> Notes { get; set; } = new HashSet<NoteApiModel>();
         public static TagApiModel FromTag(Tag tag)
             => new TagApiModel
             {

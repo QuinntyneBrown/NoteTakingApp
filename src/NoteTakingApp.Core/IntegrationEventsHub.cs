@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using NoteTakingApp.Core.Interfaces;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NoteTakingApp.Core
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class IntegrationEventsHub: Hub
     {
         private IAccessTokenRepository _repository;
@@ -33,8 +34,6 @@ namespace NoteTakingApp.Core
         {
             _connectedUsers.TryRemove(UserName, out _);
             return base.OnDisconnectedAsync(exception);
-        }
-
-        public async Task Send(object message) => await Clients.All.SendAsync("message", message);
+        }        
     }
 }

@@ -1,11 +1,10 @@
 using FluentValidation;
-using NoteTakingApp.Core.Models;
-using NoteTakingApp.Core.Extensions;
-using NoteTakingApp.Core.Interfaces;
 using MediatR;
+using NoteTakingApp.Core.DomainEvents;
+using NoteTakingApp.Core.Interfaces;
+using NoteTakingApp.Core.Models;
 using System.Threading;
 using System.Threading.Tasks;
-using NoteTakingApp.Core.DomainEvents;
 
 namespace NoteTakingApp.API.Features.Tags
 {
@@ -39,9 +38,7 @@ namespace NoteTakingApp.API.Features.Tags
 
                 if (tag == null) _context.Tags.Add(tag = new Tag());
 
-                tag.Name = request.Tag.Name;
-
-                tag.Slug = request.Tag.Name.GenerateSlug();
+                tag.Update(request.Tag.Name);
 
                 tag.RaiseDomainEvent(new TagSavedDomainEvent(tag));
 

@@ -59,7 +59,7 @@ namespace NoteTakingApp.API.Features.Identity
 
                 if (user == null) throw new DomainException("Invalid Username!");
 
-                if (!ValidateUser(user, _passwordHasher.HashPassword(user.Salt, request.Password)))
+                if (_passwordHasher.HashPassword(user.Salt, request.Password) != user.Password)
                     throw new DomainException("Invalid Password!");
 
                 var validAccessTokens = _repository.GetValidAccessTokens();
@@ -86,16 +86,7 @@ namespace NoteTakingApp.API.Features.Identity
                     AccessToken = accessToken,
                     UserId = user.UserId
                 };
-            }
-
-            public bool ValidateUser(User user, string transformedPassword)
-            {
-                if (user == null || transformedPassword == null)
-                    return false;
-
-                return user.Password == transformedPassword;
-            }
-            
+            }               
         }
     }
 }

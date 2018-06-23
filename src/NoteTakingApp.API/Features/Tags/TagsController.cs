@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace NoteTakingApp.API.Features.Tags
@@ -12,7 +13,10 @@ namespace NoteTakingApp.API.Features.Tags
     {
         private readonly IMediator _mediator;
 
-        public TagsController(IMediator mediator) => _mediator = mediator;
+        public TagsController(IMediator mediator)
+        {
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        }
 
         [HttpGet("slug/{slug}")]
         public async Task<ActionResult<GetTagBySlugQuery.Response>> GetBySlug([FromRoute]GetTagBySlugQuery.Request request)

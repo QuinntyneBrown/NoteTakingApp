@@ -1,30 +1,32 @@
 using FluentValidation;
-using NoteTakingApp.Core.Models;
-using NoteTakingApp.Core.Extensions;
-using NoteTakingApp.Core.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NoteTakingApp.Core.DomainEvents;
+using NoteTakingApp.Core.Interfaces;
+using NoteTakingApp.Core.Models;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NoteTakingApp.Core.DomainEvents;
 
 namespace NoteTakingApp.API.Features.Notes
 {
     public class SaveNoteCommand
     {
-        public class Validator: AbstractValidator<Request> {
+        public class Validator : AbstractValidator<Request>
+        {
             public Validator()
             {
                 RuleFor(request => request.Note.NoteId).NotNull();
             }
         }
 
-        public class Request : IRequest<Response> {
+        public class Request : IRequest<Response>
+        {
             public NoteApiModel Note { get; set; }
         }
 
         public class Response
-        {			
+        {
             public int NoteId { get; set; }
         }
 
@@ -39,25 +41,14 @@ namespace NoteTakingApp.API.Features.Notes
                 var note = await _context.Notes
                     .Include(x => x.NoteTags)
                     .Include("NoteTags.Tag")
-                    .SingleOrDefaultAsync(x => request.Note.NoteId == x.NoteId,cancellationToken);
+                    .SingleOrDefaultAsync(x => request.Note.NoteId == x.NoteId, cancellationToken);
 
                 if (note == null) _context.Notes.Add(note = new Note());
 
-                note.Body = request.Note.Body;
-
-                note.Title = request.Note.Title;
-
-                note.Slug = request.Note.Title.GenerateSlug();
-
-                note.NoteTags.Clear();
-
-                foreach(var tag in request.Note.Tags)
-                {
-                    note.NoteTags.Add(new NoteTag()
-                    {
-                        Tag = (await _context.Tags.FindAsync(tag.TagId))
-                    });
-                }
+                note.Update(
+                    request.Note.Title,
+                    request.Note.Title,
+                    request.Note.Tags.Select(x => _context.Tags.Find(x.TagId)).ToList());
 
                 note.RaiseDomainEvent(new NoteSavedDomainEvent(note));
 

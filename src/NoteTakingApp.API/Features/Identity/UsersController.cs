@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace NoteTakingApp.API.Features.Identity
@@ -12,7 +13,9 @@ namespace NoteTakingApp.API.Features.Identity
     {
         private readonly IMediator _mediator;
 
-        public UsersController(IMediator mediator) => _mediator = mediator;
+        public UsersController(IMediator mediator) {
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        }
         
         [HttpPost("token")]
         public async Task<ActionResult<AuthenticateCommand.Response>> SignIn(AuthenticateCommand.Request request)
