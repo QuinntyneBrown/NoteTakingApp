@@ -27,29 +27,27 @@ export class HubClient {
     if (this._connect) return this._connect;
 
     this._connect = new Promise((resolve, reject) => {
-      const options: IHttpConnectionOptions = {
+      var options: IHttpConnectionOptions = {
+        logger: this._logger,
+        accessTokenFactory: () => this._storage.get({
+          name: accessTokenKey
+        }),
         logMessageContent: true
       };
 
       this._connection =
         this._connection || new HubConnectionBuilder()
-          .configureLogging(this._logger)
-          .withUrl(`${this._baseUrl}hub?token=${this._storage.get({ name: accessTokenKey })}`, options)
+          .withUrl(`${this._baseUrl}hub`, options)
           .build();
 
-      this._connection.on('message', value => {
-        this._logger.trace(`HubClient`, JSON.stringify(value));
+      this._connection.on('message', value =>
+        this._ngZone.run(() => this.messages$.next(value)));
 
-        this._ngZone.run(() => this.messages$.next(value));
-      });
+      this._connection.start().then(() => resolve(), () =>
+        reject());
 
-      this._connection.start().then(() => resolve(), () => {        
-        reject();        
-      });
-
-      this._connection.onclose((error) => {
-        this._loginRedirectService.redirectToLogin();
-      });
+      this._connection.onclose((error) =>
+        this._loginRedirectService.redirectToLogin());
     });
 
     return this._connect;

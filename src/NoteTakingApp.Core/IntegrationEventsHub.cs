@@ -9,37 +9,34 @@ using System.Threading.Tasks;
 
 namespace NoteTakingApp.Core
 {
-    public static class ConnectedUsers {
-        public static ConcurrentDictionary<string, byte> Value = new ConcurrentDictionary<string, byte>();
-    }
-
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class IntegrationEventsHub: Hub
     {
         private IAccessTokenRepository _repository;
         
-        public IntegrationEventsHub(IAccessTokenRepository repository) {
-            _repository = repository;
-        }
+        public IntegrationEventsHub(IAccessTokenRepository repository) 
+            => _repository = repository;
+
+        private static ConcurrentDictionary<string, byte> _connectedUsers = new ConcurrentDictionary<string, byte>();
 
         public string UserName => Context.User.Identity.Name;
-
+        
         public override async Task OnConnectedAsync()
-        {            
-            if (!ConnectedUsers.Value.TryAdd(UserName,0))
+        {
+            if (!_connectedUsers.TryAdd(UserName, 0))
             {
                 await _repository.InvalidateByUsernameAsync(UserName);
                 await _repository.SaveChangesAsync(default(CancellationToken));
                 Context.Abort();
             }
-
+            
             await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            ConnectedUsers.Value.TryRemove(UserName, out _);
-            return base.OnDisconnectedAsync(exception);
+            _connectedUsers.TryRemove(UserName, out _);
+            await base.OnDisconnectedAsync(exception);
         }        
     }    
 }

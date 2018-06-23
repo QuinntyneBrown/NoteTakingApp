@@ -39,7 +39,6 @@ namespace UnitTests.Infrastructure
         {
             await _context.AccessTokens.AddAsync(new NoteTakingApp.Core.Models.AccessToken()
             {
-                ValidTo = DateTime.UtcNow.AddYears(10),
                 Value = "",
                 Username = "Test"
             });

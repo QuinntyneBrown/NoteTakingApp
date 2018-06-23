@@ -33,7 +33,7 @@ namespace NoteTakingApp.Core.Identity
                 repository.Add(new AccessToken() {
                     Value = token,
                     Username = username,
-                    ValidTo = _tokenProvider.GetValidToDateTime(token)
+                    IsValid = true
                 });
                 await repository.SaveChangesAsync(default(CancellationToken));                
                 await _next.Invoke(httpContext);

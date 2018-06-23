@@ -75,8 +75,7 @@ namespace NoteTakingApp.API.Features.Identity
                 _repository.Add(new AccessToken()
                 {
                     Value = accessToken,
-                    Username = request.Username,
-                    ValidTo = _tokenManager.GetValidToDateTime(accessToken)
+                    Username = request.Username
                 });
 
                 await _repository.SaveChangesAsync(cancellationToken);

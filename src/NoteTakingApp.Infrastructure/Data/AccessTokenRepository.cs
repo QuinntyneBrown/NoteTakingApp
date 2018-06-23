@@ -36,7 +36,7 @@ namespace NoteTakingApp.Infrastructure.Data
             .GetOrAdd(() => GetValidAccessTokens().Select(x => x.Value).ToListAsync(), "ValidAccessTokens");
 
         public IQueryable<AccessToken> GetValidAccessTokens()
-            => _context.AccessTokens.Where(x => x.ValidTo > DateTime.UtcNow);
+            => _context.AccessTokens.Where(x => x.IsValid);
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
@@ -48,7 +48,7 @@ namespace NoteTakingApp.Infrastructure.Data
         public async Task InvalidateByUsernameAsync(string username)
         {
             foreach (var accessToken in await GetValidTokensByUsernameAsync(username))
-                accessToken.ValidTo = default(DateTime);           
+                accessToken.IsValid= false;           
         }
     }
 }

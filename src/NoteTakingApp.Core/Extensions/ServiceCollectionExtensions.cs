@@ -95,18 +95,10 @@ namespace NoteTakingApp.Core.Extensions
                     {
                         OnMessageReceived = context =>
                         {
-                            if ((context.Request.Path.Value.StartsWith("/hub"))
-                                && context.Request.Query.TryGetValue("token", out StringValues token)
-                            )
-                            {
-                                context.Token = token;
-                            }
+                            context.Request.Query.TryGetValue("access_token", out StringValues token);
 
-                            return Task.CompletedTask;
-                        },
-                        OnAuthenticationFailed = context =>
-                        {
-                            var timeoutException = context.Exception;
+                            if (!string.IsNullOrEmpty(token)) context.Token = token;
+
                             return Task.CompletedTask;
                         }
                     };

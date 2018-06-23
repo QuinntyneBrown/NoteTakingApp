@@ -10,14 +10,14 @@ using NoteTakingApp.Infrastructure.Data;
 namespace NoteTakingApp.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180620185142_Initial")]
+    [Migration("20180623233239_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.0-rtm-30799")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -27,9 +27,9 @@ namespace NoteTakingApp.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Username");
+                    b.Property<bool>("IsValid");
 
-                    b.Property<DateTime>("ValidTo");
+                    b.Property<string>("Username");
 
                     b.Property<string>("Value");
 

@@ -15,8 +15,8 @@ namespace NoteTakingApp.Infrastructure.Migrations
                     AccessTokenId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Value = table.Column<string>(nullable: true),
-                    ValidTo = table.Column<DateTime>(nullable: false),
-                    Username = table.Column<string>(nullable: true)
+                    Username = table.Column<string>(nullable: true),
+                    IsValid = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
