@@ -41,7 +41,6 @@ namespace NoteTakingApp.Infrastructure.Data
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             await _distributedCache.RemoveAsync("ValidAccessTokens", cancellationToken);
-
             return await _context.SaveChangesAsync(cancellationToken);
         }
             

@@ -14,13 +14,11 @@ namespace NoteTakingApp.API.Features.Tags
         public TagRemovedDomainEventHandler(IHubContext<IntegrationEventsHub> hubContext)
             => _hubContext = hubContext;
 
-        public async Task Handle(TagRemovedDomainEvent notification, CancellationToken cancellationToken)
-        {
-            await _hubContext.Clients.All.SendAsync("message", new
+        public async Task Handle(TagRemovedDomainEvent @event, CancellationToken cancellationToken)
+            => await _hubContext.Clients.All.SendAsync("message", new
             {
                 Type = "[Tag] Removed",
-                Payload = new { notification.TagId }
+                Payload = new { @event.TagId }
             }, cancellationToken);
-        }
     }
 }

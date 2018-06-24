@@ -14,13 +14,11 @@ namespace NoteTakingApp.API.Features.Tags
         public TagSavedDomainEventHandler(IHubContext<IntegrationEventsHub> hubContext)
             => _hubContext = hubContext;
 
-        public async Task Handle(TagSavedDomainEvent notification, CancellationToken cancellationToken)
-        {
-            await _hubContext.Clients.All.SendAsync("message", new
+        public async Task Handle(TagSavedDomainEvent @event, CancellationToken cancellationToken)
+            => await _hubContext.Clients.All.SendAsync("message", new
             {
                 Type = "[Tag] Saved",
-                Payload = new { Tag = TagApiModel.FromTag(notification.Tag) }
+                Payload = new { Tag = TagApiModel.FromTag(@event.Tag) }
             }, cancellationToken);
-        }
     }
 }

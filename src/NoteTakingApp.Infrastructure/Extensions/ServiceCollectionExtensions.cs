@@ -1,8 +1,7 @@
-﻿using NoteTakingApp.Core.Interfaces;
-using NoteTakingApp.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using NoteTakingApp.Core.Interfaces;
+using NoteTakingApp.Infrastructure.Data;
 
 namespace NoteTakingApp.Infrastructure.Extensions
 {
@@ -28,7 +27,10 @@ namespace NoteTakingApp.Infrastructure.Extensions
             {                
                 options
                 .UseLoggerFactory(AppDbContext.ConsoleLoggerFactory)
-                .UseSqlServer(connectionString, b=> b.MigrationsAssembly("NoteTakingApp.Infrastructure"));
+                .UseSqlServer(connectionString, b=> {
+                    b.MigrationsAssembly("NoteTakingApp.Infrastructure");
+                    b.EnableRetryOnFailure();
+                });
             });
 
             return services;

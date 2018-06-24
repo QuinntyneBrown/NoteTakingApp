@@ -14,13 +14,11 @@ namespace NoteTakingApp.API.Features.Notes
         public NoteRemovedDomainEventHandler(IHubContext<IntegrationEventsHub> hubContext)
             => _hubContext = hubContext;
 
-        public async Task Handle(NoteRemovedDomainEvent notification, CancellationToken cancellationToken)
-        {
-            await _hubContext.Clients.All.SendAsync("message", new
+        public async Task Handle(NoteRemovedDomainEvent @event, CancellationToken cancellationToken)
+            => await _hubContext.Clients.All.SendAsync("message", new
             {
                 Type = "[Note] Removed",
-                Payload = new { notification.NoteId }
+                Payload = new { @event.NoteId }
             }, cancellationToken);
-        }
     }
 }
