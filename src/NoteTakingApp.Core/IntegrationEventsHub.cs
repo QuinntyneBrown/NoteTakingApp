@@ -22,7 +22,7 @@ namespace NoteTakingApp.Core
         public string UserName => Context.User.Identity.Name;
         
         public override async Task OnConnectedAsync()
-        {
+        {            
             if (!_connectedUsers.TryAdd(UserName, 0))
             {
                 await _repository.InvalidateByUsernameAsync(UserName);
