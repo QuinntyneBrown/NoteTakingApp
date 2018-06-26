@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NoteTakingApp.API.Features;
-using NoteTakingApp.API.Features.Identity;
-using NoteTakingApp.API.Features.Notes;
-using NoteTakingApp.API.Features.Tags;
+using NoteTakingApp.Core.Common;
 using NoteTakingApp.Core;
 using NoteTakingApp.Core.Behaviours;
 using NoteTakingApp.Core.Extensions;
@@ -19,6 +16,7 @@ using NoteTakingApp.Infrastructure.Data;
 using NoteTakingApp.Infrastructure.Extensions;
 using System;
 using System.Linq;
+
 
 namespace NoteTakingApp.API
 {
@@ -82,7 +80,10 @@ namespace NoteTakingApp.API
                 .AddCustomSecurity(Configuration)
                 .AddCustomSignalR()
                 .AddCustomSwagger()
+                .AddSingleton<IEntityVersionManager,EntityVersionManager>()
+                .AddTransient<IEntityVersionRepository,EntityVersionRepository>()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
+                .AddTransient(typeof(IPipelineBehavior<,>), typeof(VersionedCommandBehavior<,>))
                 .AddMediatR(typeof(Startup));
         }
 
@@ -93,12 +94,16 @@ namespace NoteTakingApp.API
 
             app.UseAuthentication()
                 .UseTokenValidation()
-                .UseCors("CorsPolicy")
+                .UseCors(CorsDefaults.Policy)
                 .UseMvc()
                 .UseSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"))
                 .UseSwagger()
                 .UseSwaggerUI(options
-                => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Note Taking App API"));            
+                =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Note Taking App API");
+                    options.RoutePrefix = string.Empty;
+                });            
         }
     }
 }

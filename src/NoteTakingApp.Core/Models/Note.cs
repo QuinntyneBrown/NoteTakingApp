@@ -13,10 +13,11 @@ namespace NoteTakingApp.Core.Models
         public string Body { get; set; }
         public ICollection<NoteTag> NoteTags { get; set; } = new HashSet<NoteTag>();
 
-        public void Update(string title, string body, ICollection<Tag> tags) {
+        public void Update(string title, string body, ICollection<Tag> tags, int version) {
             Body = body;
             Title = title;
             Slug = title.ToSlug();
+            Version = version;
             NoteTags.Clear();
             foreach(var tag in tags)
                 NoteTags.Add(new NoteTag() { Tag = tag });

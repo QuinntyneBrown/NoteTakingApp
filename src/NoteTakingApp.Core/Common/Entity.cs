@@ -14,5 +14,6 @@ namespace NoteTakingApp.Core.Common
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
         public void RaiseDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
         public void ClearEvents() => _domainEvents.Clear();
+        public int Version { get; set; }
     }
 }

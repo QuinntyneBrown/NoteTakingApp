@@ -28,6 +28,7 @@ namespace NoteTakingApp.Infrastructure.Data
                     => category == DbLoggerCategory.Database.Command.Name 
                 && level == LogLevel.Information, true) });
         public DbSet<AccessToken> AccessTokens { get; set; }
+        public DbSet<EntityVersion> EntityVersions { get; set; }
         public DbSet<Note> Notes { get; set; }        
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }

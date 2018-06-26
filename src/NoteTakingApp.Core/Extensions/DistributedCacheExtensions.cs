@@ -17,5 +17,16 @@ namespace NoteTakingApp.Core.Extensions
             }
             return DeserializeObject<T>(cached);
         }
+
+        public static T GetOrAddSync<T>(this IDistributedCache distributedCache, Func<T> action, string key)
+        {
+            var cached = distributedCache.GetString(key);
+            if (string.IsNullOrEmpty(cached))
+            {
+                cached = SerializeObject(action());
+                distributedCache.SetString(cached, key);
+            }
+            return DeserializeObject<T>(cached);
+        }
     }
 }

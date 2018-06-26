@@ -11,6 +11,7 @@ namespace NoteTakingApp.API.Features.Notes
         public string Title { get; set; }
         public string Slug { get; set; }
         public string Body { get; set; }
+        public int Version { get; set; }
         public ICollection<TagApiModel> Tags = new HashSet<TagApiModel>();
 
         public static NoteApiModel FromNote(Note note, bool includeTags = true)
@@ -20,7 +21,8 @@ namespace NoteTakingApp.API.Features.Notes
                 NoteId = note.NoteId,
                 Title = note.Title,
                 Slug = note.Slug,
-                Body = note.Body
+                Body = note.Body,
+                Version = note.Version
             };
 
             if (includeTags)

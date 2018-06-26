@@ -16,6 +16,11 @@ using System.Threading.Tasks;
 
 namespace NoteTakingApp.Core.Extensions
 {
+    public static class CorsDefaults
+    {
+        public static readonly string Policy = "CorsPolicy";
+    }
+
     public static class ServiceCollectionExtensions
     {        
         public static IMvcBuilder AddCustomMvc(this IServiceCollection services)
@@ -67,7 +72,7 @@ namespace NoteTakingApp.Core.Extensions
         
         public static IServiceCollection AddCustomSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddCors(options => options.AddPolicy("CorsPolicy",
+            services.AddCors(options => options.AddPolicy(CorsDefaults.Policy,
                 builder => builder.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader()

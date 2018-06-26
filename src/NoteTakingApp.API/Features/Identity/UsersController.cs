@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using static NoteTakingApp.API.Features.Identity.AuthenticateCommand;
 
 namespace NoteTakingApp.API.Features.Identity
 {
@@ -18,7 +19,7 @@ namespace NoteTakingApp.API.Features.Identity
         }
         
         [HttpPost("token")]
-        public async Task<ActionResult<AuthenticateCommand.Response>> SignIn(AuthenticateCommand.Request request)
+        public async Task<ActionResult<Response>> SignIn(Request request)
             => await _mediator.Send(request);
 
         [HttpGet("signout/{username}")]

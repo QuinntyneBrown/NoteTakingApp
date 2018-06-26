@@ -48,7 +48,8 @@ namespace NoteTakingApp.API.Features.Notes
                 note.Update(
                     request.Note.Title,
                     request.Note.Body,
-                    request.Note.Tags.Select(x => _context.Tags.Find(x.TagId)).ToList());
+                    request.Note.Tags.Select(x => _context.Tags.Find(x.TagId)).ToList(),
+                    request.Note.Version);
 
                 note.RaiseDomainEvent(new NoteSavedDomainEvent(note));
 

@@ -1,9 +1,9 @@
 using FluentValidation;
-using NoteTakingApp.Core.Interfaces;
 using MediatR;
+using NoteTakingApp.Core.DomainEvents;
+using NoteTakingApp.Core.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
-using NoteTakingApp.Core.DomainEvents;
 
 namespace NoteTakingApp.API.Features.Notes
 {
@@ -13,12 +13,13 @@ namespace NoteTakingApp.API.Features.Notes
         {
             public Validator()
             {
-                RuleFor(request => request.NoteId).NotEqual(0);
+                RuleFor(request => request.NoteId).NotEqual(default(int));
             }
         }
         public class Request : IRequest<Response>
         {
             public int NoteId { get; set; }
+            public int Version { get; set; }
         }
 
         public class Response { }

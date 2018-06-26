@@ -5,4 +5,5 @@ export class Note {
   public title: string;
   public body: string;
   public tags?: Array<Tag> = [];
+  public version: number = 0;
 }

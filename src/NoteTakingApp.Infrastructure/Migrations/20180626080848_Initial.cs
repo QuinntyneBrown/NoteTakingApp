@@ -24,12 +24,28 @@ namespace NoteTakingApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EntityVersions",
+                columns: table => new
+                {
+                    EntityVersionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EntityId = table.Column<int>(nullable: false),
+                    Version = table.Column<int>(nullable: false),
+                    EntityName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntityVersions", x => x.EntityVersionId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Notes",
                 columns: table => new
                 {
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    Version = table.Column<int>(nullable: false),
                     NoteId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
@@ -48,6 +64,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    Version = table.Column<int>(nullable: false),
                     TagId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
@@ -65,6 +82,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
+                    Version = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
@@ -110,6 +128,9 @@ namespace NoteTakingApp.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AccessTokens");
+
+            migrationBuilder.DropTable(
+                name: "EntityVersions");
 
             migrationBuilder.DropTable(
                 name: "NoteTag");

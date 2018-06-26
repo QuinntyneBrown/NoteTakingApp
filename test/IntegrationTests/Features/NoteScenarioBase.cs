@@ -24,8 +24,8 @@ namespace IntegrationTests.Features
 
         public static class Delete
         {
-            public static string Note(int id)
-                => $"api/notes/{id}";            
+            public static string Note(int id, int version = 0)
+                => $"api/notes/{id}/version/{version}";            
         }
     }
 }

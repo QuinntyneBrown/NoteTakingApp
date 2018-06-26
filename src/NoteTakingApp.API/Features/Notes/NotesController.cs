@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using static NoteTakingApp.Core.Common.VersionedCommand;
 
 namespace NoteTakingApp.API.Features.Notes
 {
@@ -24,11 +25,15 @@ namespace NoteTakingApp.API.Features.Notes
  
         [HttpPost]
         public async Task<ActionResult<SaveNoteCommand.Response>> Save(SaveNoteCommand.Request request)
-            => await _mediator.Send(request);
-        
-        [HttpDelete("{noteId}")]
+            => await _mediator
+            .Send(new Request<SaveNoteCommand.Request, SaveNoteCommand.Response>(request,"Save","Note"));
+
+        [HttpDelete("{noteId}/version/{version}")]
         public async Task Remove([FromRoute]RemoveNoteCommand.Request request)
-            => await _mediator.Send(request);
+        {            
+            await _mediator
+                .Send(new Request<RemoveNoteCommand.Request, RemoveNoteCommand.Response>(request, "Delete", "Note"));
+        }
 
         [HttpGet("{noteId}")]
         public async Task<ActionResult<GetNoteByIdQuery.Response>> GetById([FromRoute]GetNoteByIdQuery.Request request)
