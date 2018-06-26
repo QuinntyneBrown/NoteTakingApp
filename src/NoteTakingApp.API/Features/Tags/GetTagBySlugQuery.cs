@@ -29,7 +29,7 @@ namespace NoteTakingApp.API.Features.Tags
                 {
                     Tag = TagApiModel.FromTag(await _context.Tags
                         .Include(x =>x.NoteTags)
-                        .Include("NoteTags.Note")
+                        .ThenInclude(nt => nt.Note)
                         .Where(x => x.Slug == request.Slug)
                         .SingleAsync())
                 };

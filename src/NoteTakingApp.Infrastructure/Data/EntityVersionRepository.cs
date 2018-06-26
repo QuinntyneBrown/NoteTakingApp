@@ -13,33 +13,29 @@ namespace NoteTakingApp.Infrastructure.Data
     public class EntityVersionRepository: IEntityVersionRepository
     {
         private readonly IAppDbContext _context;
-        private readonly IDistributedCache _distributedCache;
-        private static readonly string _cacheKey = "EntityVersions";
 
-        public EntityVersionRepository(IAppDbContext context, IDistributedCache distributedCache)
+
+        public EntityVersionRepository(IAppDbContext context)
         {
             _context = context;
-            _distributedCache = distributedCache;
         }
 
-        public EntityVersion Get(int entityId, string entityName) 
-            => _distributedCache.GetOrAddSync(() => _context.EntityVersions.ToList(), _cacheKey)
-                .Where(x => x.EntityName == entityName && x.EntityId == entityId)
-                .OrderByDescending(x => x.Version)
-                .FirstOrDefault();
+        public EntityVersion Get(int entityId, string entityName)
+            => _context.EntityVersions
+            .ToList()
+            .OrderByDescending(x => x.Version)
+            .FirstOrDefault();
 
         public void Create(EntityVersion entityVersion)
             => _context.EntityVersions.Add(entityVersion);
 
         public async Task SaveChangesAsync(CancellationToken cancellationToken)
         {
-            await _distributedCache.RemoveAsync(_cacheKey, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
         public void SaveChanges()
         {
-            _distributedCache.Remove(_cacheKey);
             _context.SaveChangesAsync(default(CancellationToken)).GetAwaiter().GetResult();
         }
 

@@ -26,13 +26,15 @@ namespace NoteTakingApp.API.Features.Notes
         [HttpPost]
         public async Task<ActionResult<SaveNoteCommand.Response>> Save(SaveNoteCommand.Request request)
             => await _mediator
-            .Send(new Request<SaveNoteCommand.Request, SaveNoteCommand.Response>(request,"Save","Note"));
+            .Send(new Request<SaveNoteCommand.Request, SaveNoteCommand.Response>
+                (request,"Note"));
 
         [HttpDelete("{noteId}/version/{version}")]
         public async Task Remove([FromRoute]RemoveNoteCommand.Request request)
         {            
             await _mediator
-                .Send(new Request<RemoveNoteCommand.Request, RemoveNoteCommand.Response>(request, "Delete", "Note"));
+                .Send(new Request<RemoveNoteCommand.Request, RemoveNoteCommand.Response>
+                (request,"Note"));
         }
 
         [HttpGet("{noteId}")]

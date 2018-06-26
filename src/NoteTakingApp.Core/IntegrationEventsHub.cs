@@ -27,7 +27,6 @@ namespace NoteTakingApp.Core
             {
                 await _repository.InvalidateByUsernameAsync(UserName);
                 await _repository.SaveChangesAsync(default(CancellationToken));
-                Context.Abort();
             }
             
             await base.OnConnectedAsync();

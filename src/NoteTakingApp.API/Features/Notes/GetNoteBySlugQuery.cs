@@ -29,7 +29,7 @@ namespace NoteTakingApp.API.Features.Notes
                 {
                     Note = NoteApiModel.FromNote(await _context.Notes
                         .Include(x => x.NoteTags)
-                        .Include("NoteTags.Tag")
+                        .ThenInclude(nt => nt.Tag)                        
                         .Where(x => x.Slug == request.Slug)
                         .SingleAsync(cancellationToken))
                 };

@@ -88,6 +88,9 @@ namespace NoteTakingApp.Infrastructure.Data
             modelBuilder.Entity<NoteTag>()
                 .HasKey(t => new { t.TagId, t.NoteId });
 
+            modelBuilder.Entity<EntityVersion>()
+                .HasKey(et => new { et.EntityId, et.Version, et.EntityName });
+
             base.OnModelCreating(modelBuilder);
         }       
     }

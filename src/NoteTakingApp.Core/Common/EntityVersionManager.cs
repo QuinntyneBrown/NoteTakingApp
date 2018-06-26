@@ -1,6 +1,6 @@
-﻿using NoteTakingApp.Core.Interfaces;
+﻿using NoteTakingApp.Core.Exceptions;
+using NoteTakingApp.Core.Interfaces;
 using NoteTakingApp.Core.Models;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +17,9 @@ namespace NoteTakingApp.Core.Common
         {
             var entityVersion = _entityVersionRepository.Get(entityId, entityName);
 
+            if (entityVersion != null && version < entityVersion.Version)
+                throw new DomainException("Older version!");
+
             if (entityVersion == null) {
                 entityVersion = new EntityVersion()
                 {
@@ -29,9 +32,7 @@ namespace NoteTakingApp.Core.Common
                 _entityVersionRepository.SaveChanges();
                 return entityVersion;
             }
-            if (entityVersion != null && version < entityVersion.Version)
-                throw new Exception();
-
+            
             var newEntityVersion = new EntityVersion()
             {
                 EntityName = entityName,

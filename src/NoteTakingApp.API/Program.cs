@@ -80,7 +80,7 @@ namespace NoteTakingApp.API
                 .AddCustomSecurity(Configuration)
                 .AddCustomSignalR()
                 .AddCustomSwagger()
-                .AddSingleton<IEntityVersionManager,EntityVersionManager>()
+                .AddTransient<IEntityVersionManager,EntityVersionManager>()
                 .AddTransient<IEntityVersionRepository,EntityVersionRepository>()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(VersionedCommandBehavior<,>))

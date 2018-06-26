@@ -46,8 +46,10 @@ export class HubClient {
       this._connection.start().then(() => resolve(), () =>
         reject());
 
-      this._connection.onclose((error) =>
-        this._loginRedirectService.redirectToLogin());
+      this._connection.onclose((error) => {
+        this._storage.put({ name: accessTokenKey, value: null });
+        this._loginRedirectService.redirectToLogin()
+      });
     });
 
     return this._connect;

@@ -10,8 +10,8 @@ namespace NoteTakingApp.Infrastructure.Extensions
         public static IServiceCollection AddDataStore(this IServiceCollection services,
                                                string connectionString, bool useInMemoryDatabase = false)
         {
-            services.AddScoped<IAppDbContext, AppDbContext>();
-            services.AddScoped<IAccessTokenRepository, AccessTokenRepository>();
+            services.AddTransient<IAppDbContext, AppDbContext>();
+            services.AddTransient<IAccessTokenRepository, AccessTokenRepository>();
 
             if (useInMemoryDatabase) {
                 services.AddDbContext<AppDbContext>(options =>
