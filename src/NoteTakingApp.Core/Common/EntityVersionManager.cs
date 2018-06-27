@@ -19,31 +19,16 @@ namespace NoteTakingApp.Core.Common
 
             if (entityVersion != null && version < entityVersion.Version)
                 throw new DomainException("Older version!");
-
-            if (entityVersion == null) {
-                entityVersion = new EntityVersion()
-                {
-                    EntityId = entityId,
-                    EntityName = entityName,
-                    Version = version + 1
-                };
-
-                _entityVersionRepository.Create(entityVersion);
-                _entityVersionRepository.SaveChanges();
-                return entityVersion;
-            }
             
             var newEntityVersion = new EntityVersion()
             {
                 EntityName = entityName,
                 EntityId = entityId,
-                Version = entityVersion == null ? 1 : entityVersion.Version + 1
+                Version = entityVersion == null ? version + 1 : entityVersion.Version + 1
             };
 
             _entityVersionRepository.Create(newEntityVersion);
-
             _entityVersionRepository.SaveChanges();
-
             return newEntityVersion;
         }
         

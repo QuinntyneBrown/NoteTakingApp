@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Interfaces;
 using NoteTakingApp.Core.Models;
 using System;
@@ -13,7 +12,7 @@ namespace NoteTakingApp.Core.Common
     {
         private readonly IMediator _mediator;
         private readonly IEntityVersionManager _entityVersionManager;
-        private static readonly object _lockObject = new object();
+        
         public VersionedCommandBehavior(IMediator mediator, IEntityVersionManager entityVersionManager)
         {
             _entityVersionManager = entityVersionManager;
@@ -36,15 +35,9 @@ namespace NoteTakingApp.Core.Common
                     if (entityIdProperty != null)
                     {                                            
                         entityId = Convert.ToInt16(entityIdProperty.GetValue(inner));
-                        version = Convert.ToInt16(inner.GetType().GetProperty($"Version").GetValue(inner));
-
-                        lock (_lockObject)
-                        {
-                            entityVersion = _entityVersionManager.Acquire(entityId, entityName, version);
-                        }
-
-                        inner.GetType().GetProperty($"Version").SetValue(inner, entityVersion.Version);
-                        await _entityVersionManager.SaveChangesAsync(cancellationToken);
+                        version = Convert.ToInt16(inner.GetType().GetProperty($"Version").GetValue(inner));                        
+                        entityVersion = _entityVersionManager.Acquire(entityId, entityName, version);                        
+                        inner.GetType().GetProperty($"Version").SetValue(inner, entityVersion.Version);                        
                         return await _mediator.Send(inner);
                     }
 
@@ -55,8 +48,7 @@ namespace NoteTakingApp.Core.Common
 
                     version = Convert.ToInt16(entity.GetType().GetProperty($"Version").GetValue(entity));                    
                     entityVersion = _entityVersionManager.Acquire(entityId, entityName, version);
-                    entity.GetType().GetProperty($"Version").SetValue(entity, entityVersion.Version);
-                    await _entityVersionManager.SaveChangesAsync(cancellationToken);                   
+                    entity.GetType().GetProperty($"Version").SetValue(entity, entityVersion.Version);                                       
                     return await _mediator.Send(inner);   
                 }
                 catch

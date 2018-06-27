@@ -15,7 +15,7 @@ namespace NoteTakingApp.API.Features.Identity
         public FailedLoginInvalidUsernameOrPasswordEventHandler(IHubContext<IntegrationEventsHub> hubContext)
             => _hubContext = hubContext;
 
-        public Task Handle(FailedLoginInvalidUsernameOrPasswordEvent notification, CancellationToken cancellationToken)
+        public Task Handle(FailedLoginInvalidUsernameOrPasswordEvent @event, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
