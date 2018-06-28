@@ -3,15 +3,15 @@ using NoteTakingApp.Web.ViewModels;
 
 namespace NoteTakingApp.Web.Controllers
 {
-    [ApiController]
     public class UsersController: Controller
     {
-        public ViewResult Login() {
-            return View();
-        }
+        public UsersController() { }
+
+        public IActionResult Login() => View();
 
         [HttpPost]
-        public ViewResult Login(LoginInputViewModel inputViewModel)
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(LoginInputViewModel input)
         {
             return View();
         }
