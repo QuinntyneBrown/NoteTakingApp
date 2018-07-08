@@ -1,21 +1,18 @@
-import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { ErrorListComponent } from '../shared/error-list.component';
 
 @Injectable()
 export class ErrorService {
-  constructor(private _snackBar: MatSnackBar, private _translateService: TranslateService) {}
+  constructor(private _snackBar: MatSnackBar) { }
 
-  public handle(
-    httpErrorResponse: HttpErrorResponse,
-    message: string = 'Error',
-    action: string = 'An error ocurr.Try it again.'
-  ): MatSnackBarRef<SimpleSnackBar> {
-    return this._snackBar.open(this._translateService.instant(message), this._translateService.instant(action), {
-      duration: 0
-    });
-  }
+  public errors: Error[] = [];
+
+  public handle(httpErrorResponse: HttpErrorResponse): MatSnackBarRef<ErrorListComponent> {
+    const ref = this._snackBar.openFromComponent(ErrorListComponent, { duration: 0 });
+    this.errors = [httpErrorResponse, ...this.errors];
+    ref.instance.errors$.next(this.errors);
+    return ref;
+  }  
 }

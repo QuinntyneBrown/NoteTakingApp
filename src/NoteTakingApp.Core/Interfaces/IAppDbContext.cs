@@ -7,7 +7,6 @@ namespace NoteTakingApp.Core.Interfaces
 {
     public interface IAppDbContext
     {
-        DbSet<EntityVersion> EntityVersions { get; set; }
         DbSet<Note> Notes { get; set; }
         DbSet<AccessToken> AccessTokens { get; set; }
         DbSet<Tag> Tags { get; set; }

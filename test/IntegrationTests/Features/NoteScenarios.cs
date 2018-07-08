@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -196,8 +197,12 @@ namespace IntegrationTests.Features
                         {
                             Title = "Title",
                             Body = "<p>Something Important</p>",
+                            Version = ""
                         }
                     });
+
+                var x = await server.CreateClient()
+                    .GetAsync<GetNoteByIdQuery.Response>(Get.NoteById(1));
 
                 await server.CreateClient()
                     .PostAsAsync<SaveNoteCommand.Request, SaveNoteCommand.Response>(Post.Notes, new SaveNoteCommand.Request()
@@ -205,11 +210,14 @@ namespace IntegrationTests.Features
                         Note = new NoteApiModel()
                         {
                             NoteId = 1,
-                            Title = "Title",
+                            Title = "Wild",
                             Body = "Body",
-                            Version = 0
+                            Version = default(byte[])
                         }
                     });
+
+                var y = await server.CreateClient()
+                    .GetAsync<GetNoteByIdQuery.Response>(Get.NoteById(1));
 
                 var response = await server.CreateClient()
                     .PostAsync(Post.Notes, new 
@@ -217,9 +225,9 @@ namespace IntegrationTests.Features
                         Note = new 
                         {
                             NoteId = 1,
-                            Title = "Title",
+                            Title = "Title WTF",
                             Body = "Body",
-                            Version = 0
+                            Version = default(byte[])
                         }
                     });
                 

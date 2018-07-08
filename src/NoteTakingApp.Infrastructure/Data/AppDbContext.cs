@@ -1,19 +1,18 @@
-﻿using NoteTakingApp.Core.Models;
-using NoteTakingApp.Core.Interfaces;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using NoteTakingApp.Core.Common;
+using NoteTakingApp.Core.Interfaces;
+using NoteTakingApp.Core.Models;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections.Generic;
-using NoteTakingApp.Core.Common;
 
 namespace NoteTakingApp.Infrastructure.Data
-{    
+{
     public class AppDbContext : DbContext, IAppDbContext
     {
         private readonly IMediator _mediator;
@@ -28,7 +27,6 @@ namespace NoteTakingApp.Infrastructure.Data
                     => category == DbLoggerCategory.Database.Command.Name 
                 && level == LogLevel.Information, true) });
         public DbSet<AccessToken> AccessTokens { get; set; }
-        public DbSet<EntityVersion> EntityVersions { get; set; }
         public DbSet<Note> Notes { get; set; }        
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
@@ -78,7 +76,12 @@ namespace NoteTakingApp.Infrastructure.Data
         {
             modelBuilder.Entity<Note>()
                 .HasQueryFilter(e => !e.IsDeleted);
-            
+
+            modelBuilder.Entity<Note>()
+                .Property(e =>e.Version)
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
+
             modelBuilder.Entity<Tag>()
                 .HasQueryFilter(e => !e.IsDeleted);
 
@@ -87,9 +90,6 @@ namespace NoteTakingApp.Infrastructure.Data
 
             modelBuilder.Entity<NoteTag>()
                 .HasKey(t => new { t.TagId, t.NoteId });
-
-            modelBuilder.Entity<EntityVersion>()
-                .HasKey(et => new { et.EntityId, et.Version, et.EntityName });
 
             base.OnModelCreating(modelBuilder);
         }       

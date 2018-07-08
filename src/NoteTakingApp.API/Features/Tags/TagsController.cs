@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace NoteTakingApp.API.Features.Tags
@@ -9,7 +10,7 @@ namespace NoteTakingApp.API.Features.Tags
     [Authorize]
     [ApiController]
     [Route("api/tags")]
-    public class TagsController
+    public class TagsController: Controller
     {
         private readonly IMediator _mediator;
 

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NoteTakingApp.Core.Common;
 using NoteTakingApp.Core;
 using NoteTakingApp.Core.Behaviours;
 using NoteTakingApp.Core.Extensions;
@@ -80,10 +79,7 @@ namespace NoteTakingApp.API
                 .AddCustomSecurity(Configuration)
                 .AddCustomSignalR()
                 .AddCustomSwagger()
-                .AddTransient<IEntityVersionManager,EntityVersionManager>()
-                .AddTransient<IEntityVersionRepository,EntityVersionRepository>()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
-                .AddTransient(typeof(IPipelineBehavior<,>), typeof(VersionedCommandBehavior<,>))
                 .AddMediatR(typeof(Startup));
         }
 

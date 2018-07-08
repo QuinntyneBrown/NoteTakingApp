@@ -34,7 +34,7 @@ export class LoginComponent {
 
   public password: string;
 
-  private _snackBarRef: MatSnackBarRef<SimpleSnackBar>;
+  private _snackBarRef: MatSnackBarRef<any>;
 
   public form = new FormGroup({
     username: new FormControl(this.username, [Validators.required]),
@@ -74,7 +74,7 @@ export class LoginComponent {
   }
 
   public handleErrorResponse(errorResponse) {
-    this._snackBarRef = this._errorService.handle(errorResponse, 'Login Failed');
+    this._snackBarRef = this._errorService.handle(errorResponse);
   }
 
   ngOnDestroy() {

@@ -44,6 +44,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { GridComponent } from './grid.component';
 import { AreYouSureOverlayComponent } from './are-you-sure-overlay.component';
 import { ConfirmRefreshOverlayComponent } from './confirm-refresh-overlay.component';
+import { ErrorListComponent } from './error-list.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ConfirmRefreshOverlayComponent } from './confirm-refresh-overlay.compon
     AutoCompleteChipListComponent,
     ConfirmRefreshOverlayComponent,
     DeleteCellComponent,
+    ErrorListComponent,
     GridComponent,
     PrimaryHeaderComponent,
     QuillTextEditorComponent
@@ -143,7 +145,8 @@ import { ConfirmRefreshOverlayComponent } from './confirm-refresh-overlay.compon
   ],
   entryComponents: [
     AreYouSureOverlayComponent,
-    ConfirmRefreshOverlayComponent
+    ConfirmRefreshOverlayComponent,
+    ErrorListComponent
   ]
 })
 export class SharedModule {}

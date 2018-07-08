@@ -36,23 +36,6 @@ namespace NoteTakingApp.Infrastructure.Migrations
                     b.ToTable("AccessTokens");
                 });
 
-            modelBuilder.Entity("NoteTakingApp.Core.Models.EntityVersion", b =>
-                {
-                    b.Property<int>("EntityVersionId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EntityId");
-
-                    b.Property<string>("EntityName");
-
-                    b.Property<int>("Version");
-
-                    b.HasKey("EntityVersionId");
-
-                    b.ToTable("EntityVersions");
-                });
-
             modelBuilder.Entity("NoteTakingApp.Core.Models.Note", b =>
                 {
                     b.Property<int>("NoteId")
@@ -71,7 +54,9 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("Version");
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("NoteId");
 
@@ -107,7 +92,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<string>("Slug");
 
-                    b.Property<int>("Version");
+                    b.Property<byte[]>("Version");
 
                     b.HasKey("TagId");
 
@@ -132,7 +117,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<string>("Username");
 
-                    b.Property<int>("Version");
+                    b.Property<byte[]>("Version");
 
                     b.HasKey("UserId");
 
