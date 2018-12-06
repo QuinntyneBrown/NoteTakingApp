@@ -23,8 +23,8 @@ namespace NoteTakingApp.SPA
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-                //if (env.IsDevelopment())
-                //    spa.UseAngularCliServer("start");
+                if (env.IsDevelopment())
+                    spa.UseAngularCliServer("start");
             });
         }
     }

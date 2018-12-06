@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 
 namespace IntegrationTests
 {
@@ -51,7 +52,7 @@ namespace IntegrationTests
 
         protected IConfiguration GetConfiguration() => new ConfigurationBuilder()
                 .SetBasePath(Path.GetFullPath(@"../../../../../src/NoteTakingApp.API/"))
-                .AddJsonFile("appsettings.json", optional: false)
+                .AddUserSecrets(typeof(Startup).GetTypeInfo().Assembly)
                 .Build();
     }
 }

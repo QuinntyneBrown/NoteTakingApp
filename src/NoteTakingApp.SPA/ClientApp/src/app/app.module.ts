@@ -41,7 +41,7 @@ import { AppStore } from './app-store';
   ],
   providers: [
     AppStore,
-    { provide: baseUrl, useValue: 'http://localhost:4023/' },
+    { provide: baseUrl, useValue: 'http://localhost:27560/' },
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.onLaunch,

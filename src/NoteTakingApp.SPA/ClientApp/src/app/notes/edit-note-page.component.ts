@@ -32,7 +32,7 @@ export class EditNotePageComponent implements IDeactivatable {
     private _translateService: TranslateService
   ) { }
 
-  public ngOnInit() {
+  public ngOnInit() {    
     if (this.slug)
       this._notesService
         .getBySlug({ slug: this.slug })
