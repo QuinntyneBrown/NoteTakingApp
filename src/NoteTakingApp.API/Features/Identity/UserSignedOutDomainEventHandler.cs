@@ -11,9 +11,9 @@ namespace NoteTakingApp.API.Features.Identity
 {
     public class UserSignedOutDomainEventHandler : INotificationHandler<UserSignedOutDomainEvent>
     {
-        private readonly IAccessTokenRepository _repository;
+        private readonly ISessionRepository _repository;
 
-        public UserSignedOutDomainEventHandler(IAccessTokenRepository repository, IHubContext<IntegrationEventsHub> hubContext)
+        public UserSignedOutDomainEventHandler(ISessionRepository repository, IHubContext<IntegrationEventsHub> hubContext)
                 => _repository = repository;
 
         public async Task Handle(UserSignedOutDomainEvent notification, CancellationToken cancellationToken)

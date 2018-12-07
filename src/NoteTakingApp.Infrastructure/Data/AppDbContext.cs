@@ -26,7 +26,7 @@ namespace NoteTakingApp.Infrastructure.Data
                 new ConsoleLoggerProvider((category, level)
                     => category == DbLoggerCategory.Database.Command.Name 
                 && level == LogLevel.Information, true) });
-        public DbSet<AccessToken> AccessTokens { get; set; }
+        public DbSet<Session> Sessions { get; set; }
         public DbSet<Note> Notes { get; set; }        
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }

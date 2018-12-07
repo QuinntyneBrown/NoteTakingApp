@@ -21,7 +21,7 @@ export class HubClientGuard implements CanActivate {
       }, () => {
         this._authService.logout().subscribe(() => {
           this._loginRedirectService.lastPath = state.url;
-          this._loginRedirectService.redirectToLogin();
+          
           return this._router.parseUrl(this._loginRedirectService.loginUrl);
         });
       })

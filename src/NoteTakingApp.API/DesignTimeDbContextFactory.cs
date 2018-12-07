@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using NoteTakingApp.Infrastructure.Data;
 using System.IO;
+using System.Reflection;
 
-namespace NoteTakingApp.Infrastructure.Data
+namespace NoteTakingApp.API
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {
@@ -11,7 +13,7 @@ namespace NoteTakingApp.Infrastructure.Data
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddUserSecrets(typeof(Startup).GetTypeInfo().Assembly)
                 .Build();
 
             return new AppDbContext(new DbContextOptionsBuilder<AppDbContext>()

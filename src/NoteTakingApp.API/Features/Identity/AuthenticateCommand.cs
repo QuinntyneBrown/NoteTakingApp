@@ -37,13 +37,13 @@ namespace NoteTakingApp.API.Features.Identity
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly IAccessTokenRepository _repository;
+            private readonly ISessionRepository _repository;
             private readonly IAppDbContext _context;
             private readonly IOptionsSnapshot<AuthenticationSettings> _authenticationSettings;
             private readonly IPasswordHasher _passwordHasher;
             private readonly ITokenManager _tokenManager;
   
-            public Handler(IAccessTokenRepository repository, IAppDbContext context, IOptionsSnapshot<AuthenticationSettings> authenticationSettings, IPasswordHasher passwordHasher, ITokenManager tokenManager)
+            public Handler(ISessionRepository repository, IAppDbContext context, IOptionsSnapshot<AuthenticationSettings> authenticationSettings, IPasswordHasher passwordHasher, ITokenManager tokenManager)
             {
                 _context = context;
                 _authenticationSettings = authenticationSettings;
@@ -62,20 +62,21 @@ namespace NoteTakingApp.API.Features.Identity
                 if (_passwordHasher.HashPassword(user.Salt, request.Password) != user.Password)
                     throw new DomainException("Invalid Password!");
 
-                var validAccessTokens = _repository.GetValidAccessTokens();
+                var activeSessions = await _repository.GetConnectedSessionsAsync();
 
-                if (validAccessTokens.Count() >= _authenticationSettings.Value.MaximumUsers)
+                if (activeSessions.Count() >= _authenticationSettings.Value.MaximumUsers)
                     throw new DomainException("Exceeded Maximum Users!");
 
-                if (validAccessTokens.Where(x => x.Username == request.Username).SingleOrDefault() != null)
+                if (activeSessions.Where(x => x.Username == request.Username).SingleOrDefault() != null)
                     throw new DomainException("Already logged In!");
 
                 var accessToken = _tokenManager.Issue(request.Username);
 
-                _repository.Add(new AccessToken()
+                _repository.Add(new Session()
                 {
-                    Value = accessToken,
-                    Username = request.Username
+                    AccessToken = accessToken,
+                    Username = request.Username,
+                    SessionStatus = SessionStatus.LoggedIn
                 });
 
                 await _repository.SaveChangesAsync(cancellationToken);

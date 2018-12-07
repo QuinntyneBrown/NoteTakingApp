@@ -6,6 +6,6 @@ namespace NoteTakingApp.Core.Extensions
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseTokenValidation(this IApplicationBuilder app)
-            => app.UseMiddleware<TokenValidationMiddleware>();
+            => app.UseMiddleware<SessionManagementMiddleware>();
     }
 }

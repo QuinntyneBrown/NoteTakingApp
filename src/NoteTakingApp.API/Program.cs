@@ -77,7 +77,7 @@ namespace NoteTakingApp.API
                 .Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options))
                 .AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], Configuration.GetValue<bool>("isTest"))
                 .AddCustomSecurity(Configuration)
-                .AddCustomSignalR()
+                .AddCustomSignalR(Configuration["SignalR:DefaultConnection:ConnectionString"])
                 .AddCustomSwagger()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
                 .AddMediatR(typeof(Startup));
@@ -92,7 +92,7 @@ namespace NoteTakingApp.API
                 .UseTokenValidation()
                 .UseCors(CorsDefaults.Policy)
                 .UseMvc()
-                .UseSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"))
+                .UseAzureSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"))
                 .UseSwagger()
                 .UseSwaggerUI(options
                 =>

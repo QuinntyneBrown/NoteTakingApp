@@ -13,7 +13,7 @@ namespace UnitTests.Infrastructure
 {
     public class AccessTokenRepositoryTests
     {
-        private readonly AccessTokenRepository _accessTokenRepository;
+        private readonly SessionRepository _sessionRepository;
         private readonly IAppDbContext _context;
         private readonly IDistributedCache _distributedCache;
         public AccessTokenRepositoryTests()
@@ -26,26 +26,26 @@ namespace UnitTests.Infrastructure
 
 
             _context = new AppDbContext(options);
-            _accessTokenRepository = new AccessTokenRepository(_context, _distributedCache);
+            _sessionRepository = new SessionRepository(_context, _distributedCache);
         }
 
         [Fact]
         public void ShouldNotBeNull() {
-            Assert.NotNull(_accessTokenRepository);
+            Assert.NotNull(_sessionRepository);
         }
         
         [Fact]
         public async Task ShouldGetValidAccessTokens()
         {
-            await _context.AccessTokens.AddAsync(new NoteTakingApp.Core.Models.AccessToken()
+            await _context.Sessions.AddAsync(new NoteTakingApp.Core.Models.Session()
             {
-                Value = "",
+                AccessToken = "",
                 Username = "Test"
             });
 
             await _context.SaveChangesAsync(default(CancellationToken));
 
-            var accessTokens = await _accessTokenRepository.GetValidAccessTokenValuesAsync();
+            var accessTokens = await _sessionRepository.GetValidAccessTokenValuesAsync();
 
             Assert.Single(accessTokens);            
         }

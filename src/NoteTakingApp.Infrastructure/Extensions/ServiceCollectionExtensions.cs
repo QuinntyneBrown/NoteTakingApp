@@ -11,7 +11,7 @@ namespace NoteTakingApp.Infrastructure.Extensions
                                                string connectionString, bool useInMemoryDatabase = false)
         {
             services.AddTransient<IAppDbContext, AppDbContext>();
-            services.AddTransient<IAccessTokenRepository, AccessTokenRepository>();
+            services.AddTransient<ISessionRepository, SessionRepository>();
 
             if (useInMemoryDatabase) {
                 services.AddDbContext<AppDbContext>(options =>

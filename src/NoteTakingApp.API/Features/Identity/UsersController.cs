@@ -23,7 +23,7 @@ namespace NoteTakingApp.API.Features.Identity
             => await _mediator.Send(request);
 
         [HttpGet("signout/{username}")]
-        public async Task<ActionResult<SignOutCommand.Response>> SignOut([FromRoute]SignOutCommand.Request request)
-            => await _mediator.Send(request);
+        public IActionResult SignOut([FromRoute]SignOutCommand.Request request)
+            => new OkObjectResult(null);
     }
 }

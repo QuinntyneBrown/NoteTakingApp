@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace NoteTakingApp.Core.Interfaces
 {
-    public interface IAccessTokenRepository
+    public interface ISessionRepository
     {
         Task<List<string>> GetValidAccessTokenValuesAsync();
-        IQueryable<AccessToken> GetValidAccessTokens();
-        Task<List<AccessToken>> GetValidTokensByUsernameAsync(string username);
+        Task<IQueryable<Session>> GetConnectedSessionsAsync();
         Task InvalidateByUsernameAsync(string username);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-        void Add(AccessToken accessToken);
+        void Add(Session accessToken);
     }
 }

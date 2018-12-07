@@ -31,7 +31,7 @@ namespace NoteTakingApp.Core.Extensions
             }).AddControllersAsServices();            
         }
 
-        public static IServiceCollection AddCustomSignalR(this IServiceCollection services)
+        public static IServiceCollection AddCustomSignalR(this IServiceCollection services, string connectionString)
         {
             var settings = new JsonSerializerSettings
             {
@@ -43,7 +43,8 @@ namespace NoteTakingApp.Core.Extensions
             services.Add(new ServiceDescriptor(typeof(JsonSerializer),
                                                provider => serializer,
                                                ServiceLifetime.Transient));
-            services.AddSignalR();
+
+            services.AddSignalR().AddAzureSignalR(connectionString);
 
             return services;
         }
