@@ -31,7 +31,7 @@ namespace NoteTakingApp.Core.Extensions
             }).AddControllersAsServices();            
         }
 
-        public static IServiceCollection AddCustomSignalR(this IServiceCollection services, string connectionString)
+        public static IServiceCollection AddCustomSignalR(this IServiceCollection services, string connectionString, bool isTest)
         {
             var settings = new JsonSerializerSettings
             {
@@ -44,7 +44,15 @@ namespace NoteTakingApp.Core.Extensions
                                                provider => serializer,
                                                ServiceLifetime.Transient));
 
-            services.AddSignalR().AddAzureSignalR(connectionString);
+            if(isTest)
+            {
+                services.AddSignalR();
+            }
+            else
+            {
+                services.AddSignalR().AddAzureSignalR(connectionString);
+            }
+            
 
             return services;
         }
@@ -125,7 +133,7 @@ namespace NoteTakingApp.Core.Extensions
                 ValidAudience = configuration["Authentication:JwtAudience"],
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
-                NameClaimType = JwtRegisteredClaimNames.UniqueName
+                NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" // JwtRegisteredClaimNames.UniqueName
             };
 
             return tokenValidationParameters;

@@ -1,5 +1,6 @@
 using MediatR;
 using NoteTakingApp.Core.Interfaces;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +27,9 @@ namespace NoteTakingApp.API.Features.Notes
                 => new Response()
                 {
                     Note = NoteApiModel.FromNote(await _context.Notes.FindAsync(request.NoteId))
-                };            
+                };
+
+
         }
     }
 }

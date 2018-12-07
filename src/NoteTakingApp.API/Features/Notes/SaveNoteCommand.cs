@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using NoteTakingApp.Core.DomainEvents;
 using NoteTakingApp.Core.Interfaces;
 using NoteTakingApp.Core.Models;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,9 +22,18 @@ namespace NoteTakingApp.API.Features.Notes
             }
         }
 
-        public class Request : IRequest<Response>
+        public class Request : IRequest<Response>,ICommand<Response>
         {
             public NoteApiModel Note { get; set; }
+
+            public string Key {
+                get
+                {
+                    return Note.NoteId == 0 ? $"{Guid.NewGuid()}" : $"Note-{Note.NoteId}-{Note.Version}";
+                }
+            }
+
+            public IEnumerable<string> SideEffects => new string[0];
         }
 
         public class Response

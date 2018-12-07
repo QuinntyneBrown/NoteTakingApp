@@ -37,7 +37,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<byte[]>("Version")
+                    b.Property<int>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
@@ -92,7 +92,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<string>("Slug");
 
-                    b.Property<byte[]>("Version");
+                    b.Property<int>("Version");
 
                     b.HasKey("TagId");
 
@@ -117,7 +117,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
 
                     b.Property<string>("Username");
 
-                    b.Property<byte[]>("Version");
+                    b.Property<int>("Version");
 
                     b.HasKey("UserId");
 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NoteTakingApp.Core;
 using NoteTakingApp.Core.Behaviours;
+using NoteTakingApp.Core.Common;
 using NoteTakingApp.Core.Extensions;
 using NoteTakingApp.Core.Identity;
 using NoteTakingApp.Core.Interfaces;
@@ -73,11 +74,14 @@ namespace NoteTakingApp.API
             services.AddCustomMvc()
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
-            services.AddDistributedMemoryCache()
+            services.AddSingleton<IConcurrentCommandGuard, ConcurrentCommandGuard>();
+            services.AddSingleton<ICommandRegistry, CommandRegistry>();
+
+            services
                 .Configure<AuthenticationSettings>(options => Configuration.GetSection("Authentication").Bind(options))
                 .AddDataStore(Configuration["Data:DefaultConnection:ConnectionString"], Configuration.GetValue<bool>("isTest"))
                 .AddCustomSecurity(Configuration)
-                .AddCustomSignalR(Configuration["SignalR:DefaultConnection:ConnectionString"])
+                .AddCustomSignalR(Configuration["SignalR:DefaultConnection:ConnectionString"], Configuration.GetValue<bool>("isTest"))
                 .AddCustomSwagger()
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>))
                 .AddMediatR(typeof(Startup));
@@ -91,9 +95,18 @@ namespace NoteTakingApp.API
             app.UseAuthentication()
                 .UseTokenValidation()
                 .UseCors(CorsDefaults.Policy)
-                .UseMvc()
-                .UseAzureSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"))
-                .UseSwagger()
+                .UseMvc();
+
+            if (Configuration.GetValue<bool>("isTest"))
+            {
+                app.UseSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"));
+            }
+            else
+            {
+                app.UseAzureSignalR(routes => routes.MapHub<IntegrationEventsHub>("/hub"));
+            }
+
+            app.UseSwagger()
                 .UseSwaggerUI(options
                 =>
                 {

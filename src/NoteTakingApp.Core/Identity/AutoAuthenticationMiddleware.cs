@@ -4,6 +4,7 @@ using NoteTakingApp.Core.Models;
 using NoteTakingApp.Core.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace NoteTakingApp.Core.Identity
 {
@@ -26,16 +27,25 @@ namespace NoteTakingApp.Core.Identity
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var repository = scope.ServiceProvider.GetService<ISessionRepository>();
+                var context = scope.ServiceProvider.GetService<IAppDbContext>();
+
                 var username = "quinntynebrown@gmail.com";
                 var token = _tokenProvider.Issue(username);
                 httpContext.Request.Headers.Add("Authorization", $"Bearer {token}");
-                repository.Add(new Session() {
-                    AccessToken = token,
-                    Username = username,
-                    SessionStatus = SessionStatus.LoggedIn
-                });
-                await repository.SaveChangesAsync(default(CancellationToken));                
+
+                var session = context.Sessions.SingleOrDefault(x => x.Username == username);
+
+                if(session == null)
+                {
+                    context.Sessions.Add(new Session()
+                    {
+                        AccessToken = token,
+                        Username = username,
+                        SessionStatus = SessionStatus.LoggedIn
+                    });
+                    await context.SaveChangesAsync(default(CancellationToken));
+                }
+
                 await _next.Invoke(httpContext);
             }
         }

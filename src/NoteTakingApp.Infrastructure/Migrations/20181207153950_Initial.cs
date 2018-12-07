@@ -9,28 +9,13 @@ namespace NoteTakingApp.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AccessTokens",
-                columns: table => new
-                {
-                    AccessTokenId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Value = table.Column<string>(nullable: true),
-                    Username = table.Column<string>(nullable: true),
-                    IsValid = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccessTokens", x => x.AccessTokenId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Notes",
                 columns: table => new
                 {
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    Version = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    Version = table.Column<int>(nullable: false),
                     NoteId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
@@ -43,13 +28,28 @@ namespace NoteTakingApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sessions",
+                columns: table => new
+                {
+                    SessionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AccessToken = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: true),
+                    SessionStatus = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
                 {
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    Version = table.Column<byte[]>(nullable: true),
+                    Version = table.Column<int>(nullable: false),
                     TagId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
@@ -67,7 +67,7 @@ namespace NoteTakingApp.Infrastructure.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    Version = table.Column<byte[]>(nullable: true),
+                    Version = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Username = table.Column<string>(nullable: true),
@@ -112,10 +112,10 @@ namespace NoteTakingApp.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AccessTokens");
+                name: "NoteTag");
 
             migrationBuilder.DropTable(
-                name: "NoteTag");
+                name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "Users");

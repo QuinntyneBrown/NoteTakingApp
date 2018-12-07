@@ -27,6 +27,7 @@ namespace NoteTakingApp.Core.Identity
 
             var claims = new List<Claim>()
                 {
+                    new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", uniqueName),
                     new Claim(JwtRegisteredClaimNames.UniqueName, uniqueName),
                     new Claim(JwtRegisteredClaimNames.Sub, uniqueName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

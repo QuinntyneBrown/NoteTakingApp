@@ -23,7 +23,7 @@ namespace NoteTakingApp.Core
 
         private static ConcurrentDictionary<string, byte> _connectedUsers = new ConcurrentDictionary<string, byte>();
 
-        public string UserName => (Context.User.Identity as ClaimsIdentity).Claims.Single(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value;
+        public string UserName => Context.User.Identity.Name;
         
         public override async Task OnConnectedAsync()
         {
@@ -33,6 +33,8 @@ namespace NoteTakingApp.Core
                 session.SessionStatus = SessionStatus.Invalid;
             }
             else {
+                var sessions = _context.Sessions.ToList();
+
                 var session = _context.Sessions
                     .Single(x => x.Username == UserName && (x.SessionStatus == SessionStatus.LoggedIn || x.SessionStatus == SessionStatus.Connected));
                 session.SessionStatus = SessionStatus.Connected;                
