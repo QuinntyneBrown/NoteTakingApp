@@ -8,11 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="4.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Moq" Version="4.8.1" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
    
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>

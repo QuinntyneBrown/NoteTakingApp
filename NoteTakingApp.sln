@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTakingApp.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteTakingApp.SPA", "src\NoteTakingApp.SPA\NoteTakingApp.SPA.csproj", "{C112BD86-7911-41E5-BE90-AF60444A213E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{7A5612BE-EC16-4886-B784-ADD26FA736F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,12 +48,17 @@ Global
 		{C112BD86-7911-41E5-BE90-AF60444A213E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C112BD86-7911-41E5-BE90-AF60444A213E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C112BD86-7911-41E5-BE90-AF60444A213E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A5612BE-EC16-4886-B784-ADD26FA736F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A5612BE-EC16-4886-B784-ADD26FA736F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A5612BE-EC16-4886-B784-ADD26FA736F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5612BE-EC16-4886-B784-ADD26FA736F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5C59A849-6FAA-44A8-8779-3F420C41640A} = {CDC868AF-A53E-4820-8B1E-5223D61532BF}
+		{7A5612BE-EC16-4886-B784-ADD26FA736F0} = {CDC868AF-A53E-4820-8B1E-5223D61532BF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D80DB4B0-7BFE-4AF3-B499-EC4FEFAC34C2}
