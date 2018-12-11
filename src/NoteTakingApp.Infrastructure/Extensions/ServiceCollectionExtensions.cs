@@ -29,7 +29,7 @@ namespace NoteTakingApp.Infrastructure.Extensions
                 .UseLoggerFactory(AppDbContext.ConsoleLoggerFactory)
                 .UseSqlServer(connectionString, b=> {
                     b.MigrationsAssembly("NoteTakingApp.Infrastructure");
-                    b.EnableRetryOnFailure();
+                    //b.EnableRetryOnFailure();
                 });
             });
 

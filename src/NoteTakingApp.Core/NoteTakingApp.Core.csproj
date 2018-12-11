@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AsyncUtilities" Version="0.6.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="7.6.103" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="MediatR" Version="4.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"  Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="2.1.0" />
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.0.4" />
     <PackageReference Include="System.Reactive" Version="4.1.2" />
+    <PackageReference Include="Microsoft.ServiceFabric.Mesh.AspNetCore.Data" Version="1.0.507-beta" />
   </ItemGroup>
   
 </Project>
