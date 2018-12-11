@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,6 @@ using NoteTakingApp.Infrastructure.Data;
 using NoteTakingApp.Infrastructure.Extensions;
 using System;
 using System.Linq;
-
 
 namespace NoteTakingApp.API
 {
@@ -72,6 +72,7 @@ namespace NoteTakingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCustomMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<Startup>(); });
 
             services.AddSingleton<IConcurrentCommandGuard, ConcurrentCommandGuard>();
@@ -89,6 +90,8 @@ namespace NoteTakingApp.API
 
         public void Configure(IApplicationBuilder app, IAppDbContext context)
         {
+            app.UseResponseBuffering();
+
             if (Configuration.GetValue<bool>("isTest"))
                 app.UseMiddleware<AutoAuthenticationMiddleware>();
 
